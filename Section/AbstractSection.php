@@ -8,6 +8,7 @@ abstract class AbstractSection implements SectionInterface
 {
 
     protected $value;
+    protected $identifier;
 
     public function getDefaultValue()
     {
@@ -17,6 +18,21 @@ abstract class AbstractSection implements SectionInterface
     public function getValue()
     {
         return $this->value;
+    }
+
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
+
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+    }
+
+    public function setValue($value)
+    {
+        $this->value = $value;
     }
 
 }

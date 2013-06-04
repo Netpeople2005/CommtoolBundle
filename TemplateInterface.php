@@ -2,6 +2,8 @@
 
 namespace Optime\Bundle\CommtoolBundle;
 
+use Optime\Bundle\CommtoolBundle\Section\SectionInterface;
+
 interface TemplateInterface
 {
 
@@ -10,4 +12,10 @@ interface TemplateInterface
     public function getSections();
 
     public function getSectionNames();
+
+    public function setSectionNames(array $names);
+
+    public function setSections(array $sections);
+
+    public function addSection(SectionInterface $section);
 }

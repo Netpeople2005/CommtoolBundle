@@ -7,7 +7,7 @@ use Optime\Bundle\CommtoolBundle\TemplateInterface;
 interface ReaderInterface
 {
 
-    public function getSections();
+    public function getSections($content);
 
     public function setTemplate(TemplateInterface $template);
 

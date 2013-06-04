@@ -19,4 +19,9 @@ class Singleline extends AbstractSection
         return 'singleline';
     }
 
+    public function getIdentifier()
+    {
+        
+    }
+
 }

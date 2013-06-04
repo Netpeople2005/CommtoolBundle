@@ -1,0 +1,4 @@
+services:
+    commtool.section.singleline:
+        class: Optime\Bundle\CommtoolBundle\Section\Singleline
+        arguments: 

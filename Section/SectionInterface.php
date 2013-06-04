@@ -32,4 +32,10 @@ interface SectionInterface
      * Devuelve el valor actual de la sección.
      */
     public function getValue();
+
+    public function setValue($value);
+
+    public function getIdentifier();
+
+    public function setIdentifier($identifier);
 }

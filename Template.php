@@ -3,11 +3,13 @@
 namespace Optime\Bundle\CommtoolBundle;
 
 use Optime\Bundle\CommtoolBundle\TemplateInterface;
+use Optime\Bundle\CommtoolBundle\Section\SectionInterface;
 
 class Template implements TemplateInterface
 {
 
     protected $content;
+    protected $sections = array();
 
     public function getContent()
     {
@@ -25,6 +27,21 @@ class Template implements TemplateInterface
     }
 
     public function getSections()
+    {
+        return $this->sections;
+    }
+
+    public function addSection(SectionInterface $section)
+    {
+        $this->sections[] = $section;
+    }
+
+    public function setSections(array $sections)
+    {
+        
+    }
+
+    public function setSectionNames(array $names)
     {
         
     }
