@@ -37,7 +37,7 @@ class PhpQueryReader implements ReaderInterface
                         $section = $factory->create($name, pq($s)->html());
                         $section->setIdentifier(pq($s)->attr('data-section-id'));
                         $templateSections[] = $section;
-                    });
+            });
         }
 
         return $templateSections;

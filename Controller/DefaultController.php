@@ -10,7 +10,10 @@ class DefaultController extends Controller
     public function indexAction($name = 'Manuel')
     {
         $html = $this->render('OptimeCommtoolBundle::template_test.html.twig')->getContent();
-        $this->get('commtool_template_factory')->create('singleline', $html);
+        
+        
+        
+        $this->get('commtool_template_factory')->create(new \Optime\Bundle\CommtoolBundle\CampaignSection(), $html);
 //
 //        $t = new \Optime\Bundle\CommtoolBundle\Template();
 //        

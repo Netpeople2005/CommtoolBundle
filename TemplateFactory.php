@@ -5,16 +5,9 @@ namespace Optime\Bundle\CommtoolBundle;
 use Optime\Bundle\CommtoolBundle\Template;
 use Optime\Bundle\CommtoolBundle\SectionFactory;
 use Optime\Bundle\CommtoolBundle\Reader\ReaderInterface;
-use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 
 class TemplateFactory
 {
-
-    /**
-     *
-     * @var BuilderInterface
-     */
-    protected $builder;
 
     /**
      *

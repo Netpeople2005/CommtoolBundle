@@ -2,6 +2,7 @@
 
 namespace Optime\Bundle\CommtoolBundle;
 
+use Optime\Bundle\CommtoolBundle\Builder\Builder;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Optime\Bundle\CommtoolBundle\Section\SectionInterface;
 
@@ -20,8 +21,10 @@ class SectionFactory extends ContainerAware
         $section = $this->resolveSection($name);
 
         $section->setValue($content);
+        
+        $builder = new Builder($this);
 
-        //$section->build($builder);
+        $section->build($builder, $options);
 
         return $section;
     }
@@ -31,7 +34,7 @@ class SectionFactory extends ContainerAware
      * @param \Optime\Bundle\CommtoolBundle\Section\SectionInterface|string $name
      * @return \Optime\Bundle\CommtoolBundle\Section\SectionInterface
      */
-    protected function resolveSection($name)
+    public function resolveSection($name)
     {
         if (is_object($name) && $name instanceof SectionInterface) {
             return $name;
