@@ -1,0 +1,7 @@
+parameters:
+#    optime_commtool.example.class: Optime\Bundle\CommtoolBundle\Example
+
+services:
+#    optime_commtool.example:
+#        class: %optime_commtool.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

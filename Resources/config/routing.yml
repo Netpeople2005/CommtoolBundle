@@ -1,0 +1,3 @@
+optime_commtool_homepage:
+    pattern:  /
+    defaults: { _controller: OptimeCommtoolBundle:Default:index }
