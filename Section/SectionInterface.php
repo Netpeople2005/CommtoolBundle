@@ -2,6 +2,7 @@
 
 namespace Optime\Bundle\CommtoolBundle\Section;
 
+use Optime\Bundle\CommtoolBundle\Writer\WriterInterface;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 
 /**

@@ -5,6 +5,7 @@ namespace Optime\Bundle\CommtoolBundle\Reader;
 use Optime\Bundle\CommtoolBundle\SectionFactory;
 use Optime\Bundle\CommtoolBundle\Reader\ReaderInterface;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
+use Optime\Bundle\CommtoolBundle\Section\SectionInterface;
 
 class PhpQueryReader implements ReaderInterface
 {
@@ -24,17 +25,17 @@ class PhpQueryReader implements ReaderInterface
     {
         $doc = \phpQuery::newDocument($content); //obtengo la instancia del phpQuery para el html
 
-        $templateSections = array();
-
         $builderSections = $builder->getSections();
 
         $templateSections = array();
 
+
         foreach ($builder->getNames() as $name) {
-            foreach ($doc[".{$name}"] as $id => $el) {
-                if (pq($el)->parent(".{$name}")->size() === 0) {
-                    $el = pq($el);
-                    $section = $this->sectionFactory->create($name, $el->html(), $builderSections[$name]);
+            foreach ($doc[".{$name}." . self::SELECTOR_ELEMENT] as $id => $el) {
+                $el = pq($el);
+                var_dump($el->parent('.' . self::SELECTOR_ELEMENT)->size());//->attr('class'));
+                if ($el->parent('.' . self::SELECTOR_ELEMENT)->not('.' . $builder->getSection()->getName())->size() === 0) {
+                    $section = $this->sectionFactory->create($name, trim($el->html()), $builderSections[$name]);
                     $section->setIdentifier($el->attr('data-section-id'));
                     $templateSections[] = $section;
                 }
@@ -42,6 +43,22 @@ class PhpQueryReader implements ReaderInterface
         }
 
         return $templateSections;
+    }
+
+    /**
+     * 
+     * @param \Optime\Bundle\CommtoolBundle\Section\SectionInterface $section
+     * @return string
+     */
+    public function find(SectionInterface $section, $content)
+    {
+        $doc = \phpQuery::newDocument($content);
+
+        if ($section->getIdentifier()) {
+            return $doc[".{$section->getName()}[data-section-id={$section->getIdentifier()}]"]->html();
+        } else {
+            return $doc[".{$section->getName()}"]->html();
+        }
     }
 
 }

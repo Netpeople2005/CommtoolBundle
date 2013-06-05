@@ -1,0 +1,4 @@
+services:
+    commtool_manipulator_phpquery:
+        class: Optime\Bundle\CommtoolBundle\Template\Manipulator\PhpQueryManipulator
+        arguments: ["@commtool_section_factory"]

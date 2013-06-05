@@ -3,14 +3,12 @@
 namespace Optime\Bundle\CommtoolBundle;
 
 use Optime\Bundle\CommtoolBundle\TemplateInterface;
-use Optime\Bundle\CommtoolBundle\Section\SectionInterface;
 
 class Template implements TemplateInterface
 {
 
     protected $content;
     protected $sections = array();
-    protected $value;
 
     function __construct($content)
     {
@@ -37,17 +35,17 @@ class Template implements TemplateInterface
         $this->sections = $sections;
     }
 
-    public function getValue()
+    public function getValues()
     {
         return $this->value;
     }
 
-    public function setValue($value)
+    public function setValues($data)
     {
-        $this->value = $value;
-
-        foreach ($this->sections as $section) {
-            $section->setValue($value);
+        foreach ($this->getSections() as $section) {
+            if (isset($data[$section->getIdentifier()])) {
+                $section->setValue($data[$section->getIdentifier()]);
+            }
         }
     }
 

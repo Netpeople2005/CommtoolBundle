@@ -5,15 +5,16 @@ namespace Optime\Bundle\CommtoolBundle;
 use Optime\Bundle\CommtoolBundle\Builder\Builder;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Optime\Bundle\CommtoolBundle\Section\SectionInterface;
+use Optime\Bundle\CommtoolBundle\Template\Manipulator\TemplateManipulatorInterface;
 
 class SectionFactory extends ContainerAware
 {
 
     /**
      *
-     * @var Reader\ReaderInterface
+     * @var TemplateManipulatorInterface
      */
-    protected $reader;
+    protected $manipulator;
     protected $validTypes = array();
 
     function __construct($validTypes)
@@ -34,12 +35,14 @@ class SectionFactory extends ContainerAware
 
         $section->setValue($content);
 
-        $builder = new Builder($this);
+        $builder = new Builder($section);
 
         $section->build($builder, $options);
 
         if ($content && count($builder->getNames())) {
-            $section->setChildren($this->reader->getSections($content, $builder));
+            $this->manipulator->createSections($builder);
+
+            $section->setChildren($this->createSections($builder->getSections(), $options));
         }
 
         return $section;
@@ -74,12 +77,30 @@ class SectionFactory extends ContainerAware
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null)
     {
         parent::setContainer($container);
-        $this->reader = $this->container->get("commtool_template_reader");
     }
 
     public function getValidTypes()
     {
         return $this->validTypes;
+    }
+
+    public function getManipulator()
+    {
+        return $this->manipulator;
+    }
+
+    public function setManipulator(TemplateManipulatorInterface $manipulator)
+    {
+        $this->manipulator = $manipulator;
+    }
+
+    protected function createSections(array $prototypes, array $options = array())
+    {
+        $sections = array();
+        foreach ($prototypes as $section) {
+            $this->create($section['name'], $section['content'], $options);
+        }
+        return $sections;
     }
 
 }

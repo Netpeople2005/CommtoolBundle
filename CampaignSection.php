@@ -14,7 +14,10 @@ class CampaignSection extends AbstractSection
 
     public function build(Builder\BuilderInterface $builder, array $options = array())
     {
-        $builder->add('singleline');
+        $builder->add('singleline')
+                ->add('loop', array(
+                    'type' => 'singleline',
+                ));
     }
 
 }

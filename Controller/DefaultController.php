@@ -15,9 +15,18 @@ class DefaultController extends Controller
         
         $t = $this->get('commtool_template_factory')
                 ->create(new \Optime\Bundle\CommtoolBundle\CampaignSection(), $html);
+        
+        $r = $t->getSections();
+        var_dump($t);
+        var_dump($r);
+//        var_dump(end($r)->getChildren());
 
-        var_dump($t->getSections());
-
+//        $this->get('commtool_template_writer')->replace($t, array(
+//            '002' => "Este es el nuevo valor :-)",
+//        ));
+//        
+//        var_dump($t->getContent());
+        
         die;
 
         return $this->render('OptimeCommtoolBundle:Default:index.html.twig', array('name' => $name));

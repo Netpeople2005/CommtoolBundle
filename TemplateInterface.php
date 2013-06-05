@@ -7,13 +7,14 @@ use Optime\Bundle\CommtoolBundle\Section\SectionInterface;
 interface TemplateInterface
 {
 
+    public function setContent($content);
     public function getContent();
 
     public function getSections();
 
     public function setSections(array $sections);
 
-    public function setValue($value);
+    public function setValues($data);
 
-    public function getValue();
+    public function getValues();
 }

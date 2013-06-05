@@ -11,12 +11,10 @@ services:
             - []
         calls: 
             - [setContainer, ["@service_container"]]
-    commtool_template_reader_factory:
-        class: Optime\Bundle\CommtoolBundle\TemplateReaderFactory
-        arguments: ["@service_container"]
-    commtool_template_reader:
-        class: Optime\Bundle\CommtoolBundle\Reader\PhpQueryReader
-        factory_class: Optime\Bundle\CommtoolBundle\TemplateReaderFactory
+            - [setManipulator, ["@commtool_manipulator"]]
+    commtool_manipulator:
+        class: Optime\Bundle\CommtoolBundle\Template\Manipulator\PhpQueryManipulator
+        factory_class: Optime\Bundle\CommtoolBundle\TemplateManipulatorFactory
         factory_method: get
         arguments: 
             - "@service_container"

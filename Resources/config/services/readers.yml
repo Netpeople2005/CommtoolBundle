@@ -1,4 +1,0 @@
-services:
-    commtool_reader_phpquery:
-        class: Optime\Bundle\CommtoolBundle\Reader\PhpQueryReader
-        arguments: ["@commtool_section_factory"]

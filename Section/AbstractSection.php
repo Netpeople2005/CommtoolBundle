@@ -46,4 +46,13 @@ abstract class AbstractSection implements SectionInterface
         $this->children = $children;
     }
 
+    public function replaceContent($content, \Optime\Bundle\CommtoolBundle\Writer\WriterInterface $writer)
+    {
+        $writer->replace($content, $this);
+
+        foreach ($this->children as $section) {
+            $writer->replace($content, $section);
+        }
+    }
+
 }

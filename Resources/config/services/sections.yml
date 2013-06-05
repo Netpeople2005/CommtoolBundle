@@ -7,3 +7,9 @@ services:
         class: Optime\Bundle\CommtoolBundle\Section\Multiline
         tags:
             - {name: commtool.section.type, alias: multiline}
+    commtool.section.loop:
+        class: Optime\Bundle\CommtoolBundle\Section\Loop
+        arguments:
+            - "@commtool_manipulator"
+        tags:
+            - {name: commtool.section.type, alias: loop}
