@@ -10,6 +10,7 @@ class Template implements TemplateInterface
 
     protected $content;
     protected $sections = array();
+    protected $value;
 
     function __construct($content)
     {
@@ -31,14 +32,23 @@ class Template implements TemplateInterface
         return $this->sections;
     }
 
-    public function addSection(SectionInterface $section)
-    {
-        $this->sections[] = $section;
-    }
-
     public function setSections(array $sections)
     {
         $this->sections = $sections;
+    }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        foreach ($this->sections as $section) {
+            $section->setValue($value);
+        }
     }
 
 }

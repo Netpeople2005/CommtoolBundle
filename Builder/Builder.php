@@ -10,29 +10,21 @@ class Builder implements BuilderInterface
 {
 
     protected $sections = array();
-    protected $names = array();
-
-    /**
-     *
-     * @var SectionFactory
-     */
-    protected $factory;
-
-    function __construct(SectionFactory $factory)
-    {
-        $this->factory = $factory;
-    }
 
     public function add($name, array $options = array())
     {
-        $section = $this->factory->create($name, $options['content'], $options);
-        $this->sections[$section->getName()] = $section;
-        $this->names[$section->getName()] = $section->getName();
+        if (is_object($name) && $name instanceof SectionInterface) {
+            $this->sections[$name->getName()] = $options;
+        } elseif (is_string($name)) {
+            $this->sections[$name] = $options;
+        } else {
+            throw new \Exception("No se reconoce el valor " . (string) $name);
+        }
     }
 
     public function getNames()
     {
-        return $this->names;
+        return array_keys($this->getSections());
     }
 
     public function getSections()

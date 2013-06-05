@@ -13,5 +13,7 @@ interface TemplateInterface
 
     public function setSections(array $sections);
 
-    public function addSection(SectionInterface $section);
+    public function setValue($value);
+
+    public function getValue();
 }

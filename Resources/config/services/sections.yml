@@ -1,4 +1,9 @@
 services:
     commtool.section.singleline:
         class: Optime\Bundle\CommtoolBundle\Section\Singleline
-        arguments: 
+        tags:
+            - {name: commtool.section.type, alias: singleline}
+    commtool.section.multiline:
+        class: Optime\Bundle\CommtoolBundle\Section\Multiline
+        tags:
+            - {name: commtool.section.type, alias: multiline}

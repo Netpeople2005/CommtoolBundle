@@ -4,7 +4,7 @@ namespace Optime\Bundle\CommtoolBundle\Section;
 
 use Optime\Bundle\CommtoolBundle\Section\AbstractSection;
 
-class Singleline extends AbstractSection
+class Multiline extends AbstractSection
 {
 
     protected $value;
@@ -16,7 +16,7 @@ class Singleline extends AbstractSection
 
     public function getName()
     {
-        return 'singleline';
+        return 'multiline';
     }
 
 }

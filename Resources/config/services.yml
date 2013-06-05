@@ -7,6 +7,8 @@ services:
         arguments: ["@commtool_section_factory"]
     commtool_section_factory:
         class: Optime\Bundle\CommtoolBundle\SectionFactory
+        arguments: 
+            - []
         calls: 
             - [setContainer, ["@service_container"]]
     commtool_template_reader_factory:

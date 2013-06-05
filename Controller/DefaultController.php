@@ -16,7 +16,7 @@ class DefaultController extends Controller
         $t = $this->get('commtool_template_factory')
                 ->create(new \Optime\Bundle\CommtoolBundle\CampaignSection(), $html);
 
-        var_dump($t);
+        var_dump($t->getSections());
 
         die;
 
