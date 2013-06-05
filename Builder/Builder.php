@@ -24,7 +24,7 @@ class Builder implements BuilderInterface
 
     public function add($name, array $options = array())
     {
-        $section = $this->factory->create($name, null, $options);
+        $section = $this->factory->resolveSection($name);
         $this->sections[$section->getIdentifier()] = $section;
         $this->names[$section->getName()] = $section->getName();
     }

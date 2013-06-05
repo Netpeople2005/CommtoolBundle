@@ -23,19 +23,15 @@ class PhpQueryReader implements ReaderInterface
     public function getSections($content, array $names)
     {
         $doc = \phpQuery::newDocument($content); //obtengo la instancia del phpQuery para el html
-        
-        \phpQuery::selectDocument($doc);
 
         $templateSections = array();
         foreach ($names as $name) {
-            $sections = $doc[".{$name}"]->filter(function($el)use($name){
-                        var_dump(pq($el)->html(), pq($el)->parent()->html());
-                return pq($el)->parent(".{$name}")->size() === 0;
-            });
-            foreach ($sections as $el) {
-                $section = $this->sectionFactory->create($name, pq($el)->html());
-                $section->setIdentifier(pq($el)->attr('data-section-id'));
-                $templateSections[] = $section;
+            foreach ($doc[".{$name}"] as $el) {
+                if (pq($el)->parent(".{$name}")->size() === 0) {
+                    $section = $this->sectionFactory->create($name, pq($el)->html());
+                    $section->setIdentifier(pq($el)->attr('data-section-id'));;
+                    $templateSections[] = $section;
+                }
             }
         }
 

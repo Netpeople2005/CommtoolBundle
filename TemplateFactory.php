@@ -21,7 +21,7 @@ class TemplateFactory
 
     public function create($name, $content, array $options = array())
     {
-        $section = $this->sectionFactory->create($name, $content);
+        $section = $this->sectionFactory->create($name, $content, $options);
 
         $template = new Template($content);
         
