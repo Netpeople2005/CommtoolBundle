@@ -9,6 +9,7 @@ abstract class AbstractSection implements SectionInterface
 
     protected $value;
     protected $identifier;
+    protected $children = array();
 
     public function getDefaultValue()
     {
@@ -33,6 +34,16 @@ abstract class AbstractSection implements SectionInterface
     public function setValue($value)
     {
         $this->value = $value;
+    }
+
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    public function setChildren(array $children)
+    {
+        $this->children = $children;
     }
 
 }

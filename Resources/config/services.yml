@@ -4,7 +4,7 @@ parameters:
 services:
     commtool_template_factory:
         class: Optime\Bundle\CommtoolBundle\TemplateFactory
-        arguments: ["@commtool_template_reader","@commtool_section_factory"]
+        arguments: ["@commtool_section_factory"]
     commtool_section_factory:
         class: Optime\Bundle\CommtoolBundle\SectionFactory
         calls: 

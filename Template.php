@@ -11,6 +11,11 @@ class Template implements TemplateInterface
     protected $content;
     protected $sections = array();
 
+    function __construct($content)
+    {
+        $this->content = $content;
+    }
+
     public function getContent()
     {
         return $this->content;
@@ -19,11 +24,6 @@ class Template implements TemplateInterface
     public function setContent($content)
     {
         $this->content = $content;
-    }
-
-    public function getSectionNames()
-    {
-        return array('singleline');
     }
 
     public function getSections()
@@ -38,12 +38,7 @@ class Template implements TemplateInterface
 
     public function setSections(array $sections)
     {
-        
-    }
-
-    public function setSectionNames(array $names)
-    {
-        
+        $this->sections = $sections;
     }
 
 }

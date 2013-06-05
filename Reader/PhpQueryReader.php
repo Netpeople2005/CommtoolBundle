@@ -9,8 +9,6 @@ use Optime\Bundle\CommtoolBundle\Reader\ReaderInterface;
 class PhpQueryReader implements ReaderInterface
 {
 
-    protected $template;
-
     /**
      *
      * @var SectionFactory
@@ -22,40 +20,26 @@ class PhpQueryReader implements ReaderInterface
         $this->sectionFactory = $sectionFactory;
     }
 
-    public function getSections($content)
+    public function getSections($content, array $names)
     {
         $doc = \phpQuery::newDocument($content); //obtengo la instancia del phpQuery para el html
-        //ahora buscamos las secciones
-        $sections = (array) $this->template->getSectionNames();
+        
+        \phpQuery::selectDocument($doc);
 
         $templateSections = array();
-        
-        $factory = $this->sectionFactory;
-        
-        foreach ($sections as $name) {
-            $doc[".{$name}"]->each(function($s)use(&$templateSections, $name, $factory) {
-                        $section = $factory->create($name, pq($s)->html());
-                        $section->setIdentifier(pq($s)->attr('data-section-id'));
-                        $templateSections[] = $section;
+        foreach ($names as $name) {
+            $sections = $doc[".{$name}"]->filter(function($el)use($name){
+                        var_dump(pq($el)->html(), pq($el)->parent()->html());
+                return pq($el)->parent(".{$name}")->size() === 0;
             });
+            foreach ($sections as $el) {
+                $section = $this->sectionFactory->create($name, pq($el)->html());
+                $section->setIdentifier(pq($el)->attr('data-section-id'));
+                $templateSections[] = $section;
+            }
         }
 
         return $templateSections;
-    }
-
-    public function getTemplate()
-    {
-        return $this->template;
-    }
-
-    public function setTemplate(TemplateInterface $template)
-    {
-        $this->template = $template;
-    }
-
-    protected function resolveSection($type, $identifier, $value)
-    {
-        
     }
 
 }

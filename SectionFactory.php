@@ -10,6 +10,12 @@ class SectionFactory extends ContainerAware
 {
 
     /**
+     *
+     * @var Reader\ReaderInterface
+     */
+    protected $reader;
+
+    /**
      * 
      * @param type $name
      * @param type $content
@@ -21,10 +27,13 @@ class SectionFactory extends ContainerAware
         $section = $this->resolveSection($name);
 
         $section->setValue($content);
-        
+
         $builder = new Builder($this);
 
         $section->build($builder, $options);
+
+        var_dump($this->reader->getSections($content, $builder->getNames()));
+        $section->setChildren($this->reader->getSections($content, $builder->getNames()));
 
         return $section;
     }
@@ -43,6 +52,12 @@ class SectionFactory extends ContainerAware
         }
 
         throw new \Exception("No se reconoce el valor ", (string) $name);
+    }
+
+    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null)
+    {
+        parent::setContainer($container);
+        $this->reader = $this->container->get("commtool_template_reader");
     }
 
 }

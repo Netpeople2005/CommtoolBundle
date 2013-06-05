@@ -13,17 +13,10 @@ class DefaultController extends Controller
         
         
         
-        $this->get('commtool_template_factory')->create(new \Optime\Bundle\CommtoolBundle\CampaignSection(), $html);
-//
-//        $t = new \Optime\Bundle\CommtoolBundle\Template();
-//        
-//        $t->setContent($html);
-//        
-//        $r = new \Optime\Bundle\CommtoolBundle\Reader\PhpQueryReader();
-//        
-//        $r->setTemplate($t);
-//        
-//        var_dump($r->getSections());
+        $t = $this->get('commtool_template_factory')
+                ->create(new \Optime\Bundle\CommtoolBundle\CampaignSection(), $html);
+
+        var_dump($t);
 
         die;
 

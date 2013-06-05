@@ -11,10 +11,6 @@ interface TemplateInterface
 
     public function getSections();
 
-    public function getSectionNames();
-
-    public function setSectionNames(array $names);
-
     public function setSections(array $sections);
 
     public function addSection(SectionInterface $section);

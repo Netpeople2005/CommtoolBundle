@@ -38,4 +38,8 @@ interface SectionInterface
     public function getIdentifier();
 
     public function setIdentifier($identifier);
+
+    public function getChildren();
+
+    public function setChildren(array $children);
 }
