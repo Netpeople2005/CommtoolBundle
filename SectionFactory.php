@@ -31,14 +31,10 @@ class SectionFactory extends ContainerAware
         $builder = new Builder($this);
 
         $section->build($builder, $options);
-        
-//        var_dump($content);
-            var_dump($this->reader->getSections($content, $builder->getNames()));
-            die;
-        if ($content) {
-        }
 
-        $section->setChildren($this->reader->getSections($content, $builder->getNames()));
+        if ($content && count($builder->getNames())) {
+            $section->setChildren($this->reader->getSections($content, $builder->getNames()));
+        }
 
         return $section;
     }

@@ -4,6 +4,7 @@ namespace Optime\Bundle\CommtoolBundle\Builder;
 
 use Optime\Bundle\CommtoolBundle\SectionFactory;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
+use Optime\Bundle\CommtoolBundle\Section\SectionInterface;
 
 class Builder implements BuilderInterface
 {
@@ -24,8 +25,8 @@ class Builder implements BuilderInterface
 
     public function add($name, array $options = array())
     {
-        $section = $this->factory->resolveSection($name);
-        $this->sections[$section->getIdentifier()] = $section;
+        $section = $this->factory->create($name, $options['content'], $options);
+        $this->sections[$section->getName()] = $section;
         $this->names[$section->getName()] = $section->getName();
     }
 
@@ -38,4 +39,5 @@ class Builder implements BuilderInterface
     {
         return $this->sections;
     }
+
 }
