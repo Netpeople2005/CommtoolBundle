@@ -12,12 +12,11 @@ class DefaultController extends Controller
         $html = $this->render('OptimeCommtoolBundle::template_test.html.twig')->getContent();
         
         
-        
         $t = $this->get('commtool_template_factory')
-                ->create(new \Optime\Bundle\CommtoolBundle\CampaignSection(), $html);
+                ->create(new \Optime\Bundle\CommtoolBundle\CampaignTemplate(), $html);
         
-        $r = $t->getSections();
-        var_dump($t);
+        $r = $t->getControls();
+//        var_dump($t);
         var_dump($r);
 //        var_dump(end($r)->getChildren());
 

@@ -2,18 +2,19 @@
 
 namespace Optime\Bundle\CommtoolBundle;
 
-use Optime\Bundle\CommtoolBundle\Template;
-use Optime\Bundle\CommtoolBundle\SectionFactory;
+use Optime\Bundle\CommtoolBundle\TemplateInterface;
+use Optime\Bundle\CommtoolBundle\ControlFactory;
 use Optime\Bundle\CommtoolBundle\Writer\WriterInterface;
+use Optime\Bundle\CommtoolBundle\Builder\Builder;
 
 class TemplateFactory
 {
 
     /**
      *
-     * @var SectionFactory
+     * @var ControlFactory
      */
-    protected $sectionFactory;
+    protected $controlFactory;
 
     /**
      *
@@ -21,22 +22,25 @@ class TemplateFactory
      */
     protected $writer;
 
-    function __construct(SectionFactory $sectionFactory)
+    function __construct(ControlFactory $controlFactory)
     {
-        $this->sectionFactory = $sectionFactory;
+        $this->controlFactory = $controlFactory;
     }
 
-    public function create($name, $content, array $options = array())
+    public function create(TemplateInterface $template, $content, array $options = array())
     {
-        $manipulator = $this->sectionFactory->getManipulator();
-        
+        $manipulator = $this->controlFactory->getManipulator();
+
         $manipulator->setContent($content);
+        $builder = new Builder($this->controlFactory, null);
 
-        $section = $this->sectionFactory->create($name, $content, $options);
+        $template->build($builder, $options);
 
-        $template = new Template($manipulator->getContent());
+        $manipulator->createControls($builder);
+        
+        $template->setContent($manipulator->getContent());
 
-        $template->setSections($section->getChildren());
+        $template->setControls($builder->getControls());
 
         return $template;
     }

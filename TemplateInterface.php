@@ -2,17 +2,20 @@
 
 namespace Optime\Bundle\CommtoolBundle;
 
-use Optime\Bundle\CommtoolBundle\Section\SectionInterface;
+use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 
 interface TemplateInterface
 {
 
+    public function build(BuilderInterface $builder, array $options = array());
+
     public function setContent($content);
+
     public function getContent();
 
-    public function getSections();
+    public function getControls();
 
-    public function setSections(array $sections);
+    public function setControls(array $sections);
 
     public function setValues($data);
 

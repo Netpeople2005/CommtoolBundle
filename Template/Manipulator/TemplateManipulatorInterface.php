@@ -2,7 +2,7 @@
 
 namespace Optime\Bundle\CommtoolBundle\Template\Manipulator;
 
-use Optime\Bundle\CommtoolBundle\Section\SectionInterface;
+use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 
 interface TemplateManipulatorInterface
@@ -25,27 +25,28 @@ interface TemplateManipulatorInterface
     /**
      * Carga en la sección, el valor de este, actualmente representado en el contenido actual 
      * del manipulador
-     * @param SectionInterface $section
+     * @param ControlInterface $section
      */
-    public function load(SectionInterface $section);
+    public function load(ControlInterface $section);
 
     /**
      * Guarda en el content actual, el valor de la sección.
-     * @param \Optime\Bundle\CommtoolBundle\Section\SectionInterface $section
+     * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface $section
      */
-    public function save(SectionInterface $section);
+    public function save(ControlInterface $section);
 
     /**
      * Verifica la existencia de la sección en el content actual
-     * @param \Optime\Bundle\CommtoolBundle\Section\SectionInterface $section
+     * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface $section
      * @return boolean
      */
-    public function exists(SectionInterface $section);
+    public function exists(ControlInterface $section);
 
     /**
      * Crea secciones a partir de los tipos especificados en el builder.
      * @param \Optime\Bundle\CommtoolBundle\Builder\BuilderInterface $builder
+     * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface $parent si se especifica, crea las secciones a partir de esa sección
      * @return array arreglo con las secciones creadas.
      */
-    public function createSections(BuilderInterface $builder);
+    public function createControls(BuilderInterface $builder,  ControlInterface $parent = null);
 }

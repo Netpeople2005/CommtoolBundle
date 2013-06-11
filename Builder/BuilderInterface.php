@@ -2,27 +2,29 @@
 
 namespace Optime\Bundle\CommtoolBundle\Builder;
 
-use Optime\Bundle\CommtoolBundle\Section\SectionInterface;
+use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
 
 interface BuilderInterface
 {
 
     /**
      * 
-     * @param type $name
+     * @param type $sectionName
      * @param array $options
      * @return BuilderInterface
      */
-    public function add($name, array $options = array());
+    public function add($sectionName, array $options = array());
 
-    public function setSections(array $sections);
+    public function setControls(array $sections);
+
+    public function getControls();
 
     public function getSections();
 
-    public function getNames();
-
     /**
-     * @return SectionInterface
+     * @return ControlInterface
      */
-    public function getSection();
+    public function getControl();
+    
+    public function getPrototypes();
 }

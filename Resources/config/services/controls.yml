@@ -1,0 +1,15 @@
+services:
+    commtool.control.singleline:
+        class: Optime\Bundle\CommtoolBundle\Control\Singleline
+        tags:
+            - {name: commtool.control.type, alias: singleline}
+    commtool.control.multiline:
+        class: Optime\Bundle\CommtoolBundle\Control\Multiline
+        tags:
+            - {name: commtool.control.type, alias: multiline}
+    commtool.control.loop:
+        class: Optime\Bundle\CommtoolBundle\Control\Loop
+        arguments:
+            - "@commtool_manipulator"
+        tags:
+            - {name: commtool.control.type, alias: loop}

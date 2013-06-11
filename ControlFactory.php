@@ -4,10 +4,10 @@ namespace Optime\Bundle\CommtoolBundle;
 
 use Optime\Bundle\CommtoolBundle\Builder\Builder;
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Optime\Bundle\CommtoolBundle\Section\SectionInterface;
+use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
 use Optime\Bundle\CommtoolBundle\Template\Manipulator\TemplateManipulatorInterface;
 
-class SectionFactory extends ContainerAware
+class ControlFactory extends ContainerAware
 {
 
     /**
@@ -27,35 +27,37 @@ class SectionFactory extends ContainerAware
      * @param type $name
      * @param type $content
      * @param array $options
-     * @return SectionInterface
+     * @return ControlInterface
      */
     public function create($name, $content, array $options = array())
     {
-        $section = $this->resolveSection($name);
+        $control = $this->resolveControl($name);
 
-        $section->setValue($content);
+        $control->setValue($content);
+        $control->setOptions($options);
 
-        $builder = new Builder($section);
+        $builder = new Builder($this, $control);
 
-        $section->build($builder, $options);
+        $control->build($builder, $options);
 
-        if ($content && count($builder->getNames())) {
-            $this->manipulator->createSections($builder);
+        if ($content && count($builder->getPrototypes())) {
 
-            $section->setChildren($this->createSections($builder->getSections(), $options));
+            $this->manipulator->createControls($builder, $control);
+
+            $control->setChildren($builder->getControls());
         }
 
-        return $section;
+        return $control;
     }
 
     /**
      * 
-     * @param \Optime\Bundle\CommtoolBundle\Section\SectionInterface|string $name
-     * @return \Optime\Bundle\CommtoolBundle\Section\SectionInterface
+     * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface|string $name
+     * @return \Optime\Bundle\CommtoolBundle\Control\ControlInterface
      */
-    public function resolveSection($name)
+    public function resolveControl($name)
     {
-        if (is_object($name) && $name instanceof SectionInterface) {
+        if (is_object($name) && $name instanceof ControlInterface) {
             if (isset($this->validTypes[$name->getName()])) {
                 $name = $name->getName();
             } else {
@@ -72,6 +74,13 @@ class SectionFactory extends ContainerAware
         }
 
         throw new \Exception("El tipo de sección $name no existe");
+    }
+
+    public function getSelector($name)
+    {
+        if (isset($this->validTypes[$name])) {
+            return $this->container->get($this->validTypes[$name])->getSelector();
+        }
     }
 
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null)
@@ -92,15 +101,6 @@ class SectionFactory extends ContainerAware
     public function setManipulator(TemplateManipulatorInterface $manipulator)
     {
         $this->manipulator = $manipulator;
-    }
-
-    protected function createSections(array $prototypes, array $options = array())
-    {
-        $sections = array();
-        foreach ($prototypes as $section) {
-            $this->create($section['name'], $section['content'], $options);
-        }
-        return $sections;
     }
 
 }

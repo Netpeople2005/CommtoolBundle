@@ -1,15 +1,21 @@
 <?php
 
-namespace Optime\Bundle\CommtoolBundle\Section;
+namespace Optime\Bundle\CommtoolBundle\Control;
 
-use Optime\Bundle\CommtoolBundle\Section\SectionInterface;
+use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
 
-abstract class AbstractSection implements SectionInterface
+abstract class AbstractControl implements ControlInterface
 {
 
     protected $value;
     protected $identifier;
     protected $children = array();
+
+    /**
+     *
+     * @var ControlInterface
+     */
+    protected $parent;
     protected $options = array();
 
     public function getDefaultValue()
@@ -47,21 +53,12 @@ abstract class AbstractSection implements SectionInterface
         $this->children = $children;
     }
 
-    public function replaceContent($content, \Optime\Bundle\CommtoolBundle\Writer\WriterInterface $writer)
-    {
-        $writer->replace($content, $this);
-
-        foreach ($this->children as $section) {
-            $writer->replace($content, $section);
-        }
-    }
-
     public function getSelector()
     {
-        if (null === $this->getOptions('no_selector')) {
-            return $this->getName();
+        if ($this->getParent()) {
+            return $this->getParent()->getName() . '_' . $this->getName();
         } else {
-            return false;
+            return $this->getName();
         }
     }
 
@@ -77,6 +74,16 @@ abstract class AbstractSection implements SectionInterface
     public function setOptions(array $options)
     {
         $this->options = $options;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    public function setParent(ControlInterface $parent)
+    {
+        $this->parent = $parent;
     }
 
 }

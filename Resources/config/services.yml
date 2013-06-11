@@ -4,9 +4,9 @@ parameters:
 services:
     commtool_template_factory:
         class: Optime\Bundle\CommtoolBundle\TemplateFactory
-        arguments: ["@commtool_section_factory"]
-    commtool_section_factory:
-        class: Optime\Bundle\CommtoolBundle\SectionFactory
+        arguments: ["@commtool_control_factory"]
+    commtool_control_factory:
+        class: Optime\Bundle\CommtoolBundle\ControlFactory
         arguments: 
             - []
         calls: 

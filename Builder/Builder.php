@@ -2,42 +2,73 @@
 
 namespace Optime\Bundle\CommtoolBundle\Builder;
 
+use Optime\Bundle\CommtoolBundle\ControlFactory;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
-use Optime\Bundle\CommtoolBundle\Section\SectionInterface;
+use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
 
 class Builder implements BuilderInterface
 {
 
+    protected $controls = array();
+    protected $prototypes = array();
     protected $sections = array();
-    protected $names = array();
 
     /**
      *
-     * @var SectionInterface
+     * @var ControlFactory
      */
-    protected $current;
+    protected $factory;
 
-    function __construct(SectionInterface $current)
+    /**
+     *
+     * @var ControlInterface
+     */
+    protected $parent;
+
+    function __construct(ControlFactory $factory, ControlInterface $parent = null)
     {
-        $this->current = $current;
+        $this->factory = $factory;
+        $this->parent = $parent;
     }
 
-    public function add($name, array $options = array())
+    public function add($sectionName, array $options = array())
     {
-        if (is_object($name) && $name instanceof SectionInterface) {
-            $this->names[] = array($name->getName(), $options);
-        } elseif (is_string($name)) {
-            $this->names[] = array($name, $options);
-        } else {
-            throw new \Exception("No se reconoce el valor " . (string) $name);
+        $prototype = $this->factory->create($sectionName, null, $options);
+
+        if (isset($this->prototypes[$prototype->getSelector()])) {
+            throw new \Exception("No se puede agregar más de una sección que use el mismo selector");
+        }
+
+        $prototype->setOptions($options);
+
+        $this->prototypes[$prototype->getSelector()] = $prototype;
+
+        $this->sections[$prototype->getSelector()] = $prototype->getSelector();
+
+        if ($this->parent) {
+            $prototype->setParent($this->parent);
         }
 
         return $this;
     }
 
-    public function getNames()
+    public function getControls()
     {
-        return $this->names;
+        return $this->controls;
+    }
+
+    /**
+     * 
+     * @return ControlInterface
+     */
+    public function getControl()
+    {
+        return $this->parent;
+    }
+
+    public function setControls(array $sections)
+    {
+        $this->controls = $sections;
     }
 
     public function getSections()
@@ -45,18 +76,9 @@ class Builder implements BuilderInterface
         return $this->sections;
     }
 
-    /**
-     * 
-     * @return SectionInterface
-     */
-    public function getSection()
+    public function getPrototypes()
     {
-        return $this->current;
-    }
-
-    public function setSections(array $sections)
-    {
-        $this->sections = $sections;
+        return $this->prototypes;
     }
 
 }

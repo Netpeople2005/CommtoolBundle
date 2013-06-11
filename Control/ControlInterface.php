@@ -1,24 +1,23 @@
 <?php
 
-namespace Optime\Bundle\CommtoolBundle\Section;
+namespace Optime\Bundle\CommtoolBundle\Control;
 
-use Optime\Bundle\CommtoolBundle\Writer\WriterInterface;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 
 /**
  * Define una sección del Elemento Editable.
  * Puede contener desde el propio elemento hasta un subelemento cualquiera.
  */
-interface SectionInterface
+interface ControlInterface
 {
 
     /**
-     * Devuelve el nombre que identifica a la sección
+     * Devuelve el nombre que identifica la sección que maneja el control
      */
     public function getName();
 
     /**
-     * Crea como tal la sección y sus subsecciones.
+     * Crea como tal el control y sus subcontroles.
      * @param type $builder
      * @param array $options opciones adicionales del template
      */
@@ -45,6 +44,10 @@ interface SectionInterface
     public function setChildren(array $children);
 
     public function getSelector();
+
+    public function getParent();
+
+    public function setParent(ControlInterface $parent);
 
     public function getOptions($name = null);
 

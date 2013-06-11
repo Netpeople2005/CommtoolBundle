@@ -1,11 +1,12 @@
 <?php
 
-namespace Optime\Bundle\CommtoolBundle\Section;
+namespace Optime\Bundle\CommtoolBundle\Control;
 
-use Optime\Bundle\CommtoolBundle\Section\AbstractSection;
+use Optime\Bundle\CommtoolBundle\Control\AbstractControl;
+use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 use Optime\Bundle\CommtoolBundle\Template\Manipulator\TemplateManipulatorInterface;
 
-class Loop extends AbstractSection
+class Loop extends AbstractControl
 {
 
     /**
@@ -16,10 +17,10 @@ class Loop extends AbstractSection
 
     public function __construct(TemplateManipulatorInterface $manipulator)
     {
-        $this->manipulator = $manipulator;
+        //$this->manipulator = $manipulator;
     }
 
-    public function build(\Optime\Bundle\CommtoolBundle\Builder\BuilderInterface $builder, array $options = array())
+    public function build(BuilderInterface $builder, array $options = array())
     {
         if (!isset($options['type'])) {
             throw new \Exception("Se debe especificar el atributo type en las opciones de la sección de tipo loop");

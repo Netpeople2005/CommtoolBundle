@@ -2,8 +2,9 @@
 
 namespace Optime\Bundle\CommtoolBundle\Template\Manipulator;
 
-use Optime\Bundle\CommtoolBundle\SectionFactory;
+use Optime\Bundle\CommtoolBundle\ControlFactory;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
+use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
 use Optime\Bundle\CommtoolBundle\Template\Manipulator\TemplateManipulatorInterface;
 
 class PhpQueryManipulator implements TemplateManipulatorInterface
@@ -11,7 +12,7 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
 
     /**
      * 
-     * @var SectionFactory
+     * @var ControlFactory
      */
     protected $factory;
 
@@ -21,33 +22,36 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
      */
     protected $phpQueryCont;
 
-    public function __construct(SectionFactory $factory)
+    public function __construct(ControlFactory $factory)
     {
         $this->factory = $factory;
     }
 
-    public function createSections(BuilderInterface $builder)
+    public function createControls(BuilderInterface $builder, ControlInterface $parent = null)
     {
-        $templateSections = array();
-        var_dump($builder->getNames());
-        foreach ($builder->getNames() as $name) {
-            foreach ($this->phpQueryCont[".{$name}." . self::SELECTOR_ELEMENT] as $id => $el) {
+        $controls = array();
+
+        if ($parent) {
+            $phpQuery = \phpQuery::newDocument($parent->getValue());
+        } else {
+            $phpQuery = $this->phpQueryCont;
+        }
+        foreach ($builder->getPrototypes() as $prototype) {
+            $items = $phpQuery['.' . $prototype->getSelector()];
+            foreach ($items as $el) {
                 $el = pq($el);
-                if ($el->parent('.' . self::SELECTOR_ELEMENT)
-                                ->not('.' . $builder->getSection()->getName())->size() === 0) {
-                    $templateSections[] = array(
-                        'id' => $el->attr('data-section-id'),
-                        'name' => $name,
-                        'content' => trim($el->html()),
-                    );
-                }
+                $control = $this->factory->create($prototype->getName()
+                        , $el->html(), $prototype->getOptions());
+                var_dump($el->attr('data-section-id'));
+                $control->setIdentifier($el->attr('data-section-id'));
+                $controls[] = $control;
             }
         }
 
-        $builder->setSections($templateSections);
+        $builder->setControls($controls);
     }
 
-    public function exists(\Optime\Bundle\CommtoolBundle\Section\SectionInterface $section)
+    public function exists(\Optime\Bundle\CommtoolBundle\Control\ControlInterface $section)
     {
         
     }
@@ -57,12 +61,12 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
         return $this->phpQueryCont->htmlOuter();
     }
 
-    public function load(\Optime\Bundle\CommtoolBundle\Section\SectionInterface $section)
+    public function load(\Optime\Bundle\CommtoolBundle\Control\ControlInterface $section)
     {
         
     }
 
-    public function save(\Optime\Bundle\CommtoolBundle\Section\SectionInterface $section)
+    public function save(\Optime\Bundle\CommtoolBundle\Control\ControlInterface $section)
     {
         
     }
