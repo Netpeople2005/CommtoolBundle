@@ -25,6 +25,6 @@ class OptimeCommtoolExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('services/controls.yml');
-        $loader->load('services/manipulators.yml');
+//        $loader->load('services/manipulators.yml');
     }
 }

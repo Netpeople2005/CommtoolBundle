@@ -15,7 +15,7 @@ interface TemplateInterface
 
     public function getControls();
 
-    public function setControls(array $sections);
+    public function setControls(array $controls);
 
     public function setValues($data);
 

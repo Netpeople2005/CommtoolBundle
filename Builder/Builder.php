@@ -81,4 +81,19 @@ class Builder implements BuilderInterface
         return $this->prototypes;
     }
 
+    public function getValues()
+    {
+        $values = array();
+
+        foreach ($this->getControls() as $index => $control) {
+            if (null !== $control->getIdentifier()) {
+                $values[$control->getIdentifier()] = $control->getValue();
+            } else {
+                $values[] = $control->getValue();
+            }
+        }
+
+        return $values;
+    }
+
 }

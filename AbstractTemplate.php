@@ -25,23 +25,31 @@ abstract class AbstractTemplate implements TemplateInterface
         return $this->controls;
     }
 
-    public function setControls(array $sections)
+    public function setControls(array $controls)
     {
-        $this->controls = $sections;
+        foreach ($controls as $control) {
+            $this->controls[$control->getIdentifier()] = $control;
+        }
     }
 
     public function getValues()
     {
-        return $this->value;
+        $values = array();
+        
+        foreach ($this->getControls() as $control) {
+            $values[$control->getIdentifier()] = $control->getValue();
+        }
+
+        return $values;
     }
 
     public function setValues($data)
     {
-//        foreach ($this->getControls() as $section) {
-//            if (isset($data[$section->getIdentifier()])) {
-//                $section->setValue($data[$section->getIdentifier()]);
-//            }
-//        }
+        foreach ($this->getControls() as $identifier => $control) {
+            if (isset($data[$identifier])) {
+                $control->setValue($data[$identifier]);
+            }
+        }
     }
 
 }

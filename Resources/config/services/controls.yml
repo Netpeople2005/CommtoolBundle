@@ -9,7 +9,11 @@ services:
             - {name: commtool.control.type, alias: multiline}
     commtool.control.loop:
         class: Optime\Bundle\CommtoolBundle\Control\Loop
+        tags:
+            - {name: commtool.control.type, alias: loop}
+    commtool.control.product:
+        class: Optime\Bundle\CommtoolBundle\Control\Product
         arguments:
             - "@commtool_manipulator"
         tags:
-            - {name: commtool.control.type, alias: loop}
+            - {name: commtool.control.type, alias: product}

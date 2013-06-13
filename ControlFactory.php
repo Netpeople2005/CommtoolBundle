@@ -31,9 +31,24 @@ class ControlFactory extends ContainerAware
      */
     public function create($name, $content, array $options = array())
     {
-        $control = $this->resolveControl($name);
+        return $this->_create($this->resolveControl($name), $content, $options);
+    }
 
-        $control->setValue($content);
+    /**
+     * 
+     * @param type $name
+     * @param type $content
+     * @param array $options
+     * @return ControlInterface
+     */
+    public function createFromPrototype(ControlInterface $control, $content, array $options = array())
+    {
+        return $this->_create(clone $control, $content, $options);
+    }
+
+    protected function _create($control, $content, array $options = array())
+    {
+        $control->setContent($content);
         $control->setOptions($options);
 
         $builder = new Builder($this, $control);
@@ -45,6 +60,14 @@ class ControlFactory extends ContainerAware
             $this->manipulator->createControls($builder, $control);
 
             $control->setChildren($builder->getControls());
+
+            $control->setValue($builder->getValues());
+        } else {
+            if ($content instanceof \phpQueryObject) {
+                $control->setValue(trim($content->html()));
+            } else {
+                $control->setValue(trim((string) $content));
+            }
         }
 
         return $control;

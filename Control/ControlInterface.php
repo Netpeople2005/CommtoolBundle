@@ -43,7 +43,7 @@ interface ControlInterface
 
     public function setChildren(array $children);
 
-    public function getSelector();
+    public function getSelector($useParent = true);
 
     public function getParent();
 
@@ -52,4 +52,9 @@ interface ControlInterface
     public function getOptions($name = null);
 
     public function setOptions(array $options);
+    
+    public function getContent();
+
+    public function setContent($content);
+    
 }

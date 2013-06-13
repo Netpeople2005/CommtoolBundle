@@ -27,4 +27,5 @@ interface BuilderInterface
     public function getControl();
     
     public function getPrototypes();
+    public function getValues();
 }

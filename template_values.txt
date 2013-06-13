@@ -1,0 +1,46 @@
+<?php
+
+array(
+    '001' => 'Hola Mundo',
+    '003' => array(
+        array('singleline' => 'Manuel')
+        array('singleline' => 'José')
+        array('singleline' => 'Carlos')
+    ),
+
+array(
+    '001' => array(
+        'content' => 'Hola Mundo',
+        'parent' => null,
+    ),
+    '003' => array(
+        array(
+            'singleline' => array(
+                'content' => 'Manuel',
+                'parent' => '003',
+            ),
+        ),
+        array(
+            'singleline' => array(
+                'content' => 'José',
+                'parent' => '003',
+            ),
+        ),
+        array(
+            'singleline' => array(
+                'content' => 'Carlos',
+                'parent' => '003',
+            ),
+        ),
+    ),
+)
+
+tabla:
+
+section:
+
+    id:
+    edition_id:
+    identifier:
+    parent_id:
+    value:

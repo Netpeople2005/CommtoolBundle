@@ -41,8 +41,6 @@ class TemplateFactory
         $template->setContent($manipulator->getContent());
 
         $template->setControls($builder->getControls());
-
-        return $template;
     }
 
 }

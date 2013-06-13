@@ -10,6 +10,7 @@ abstract class AbstractControl implements ControlInterface
     protected $value;
     protected $identifier;
     protected $children = array();
+    protected $content;
 
     /**
      *
@@ -41,6 +42,13 @@ abstract class AbstractControl implements ControlInterface
     public function setValue($value)
     {
         $this->value = $value;
+        if (is_array($value)) {
+            foreach ($this->children as $control) {
+                if (isset($value[$control->getIdentifier()])) {
+                    $control->setValue($value[$control->getIdentifier()]);
+                }
+            }
+        }
     }
 
     public function getChildren()
@@ -53,13 +61,25 @@ abstract class AbstractControl implements ControlInterface
         $this->children = $children;
     }
 
-    public function getSelector()
+    public function getSelector($useParent = true)
     {
+
         if ($this->getParent()) {
-            return $this->getParent()->getName() . '_' . $this->getName();
+            $parent = $this->getParent();
+            if ($useParent) {
+                $selector = $parent->getSelector() . ' .' . $parent->getName() . '_' . $this->getName();
+            } else {
+                $selector = '.' . $parent->getName() . '_' . $this->getName();
+            }
         } else {
-            return $this->getName();
+            $selector = '.' . $this->getName();
         }
+
+        if (null !== $this->getIdentifier()) {
+            $selector .= "[data-section-id={$this->getIdentifier()}]";
+        }
+
+        return $selector;
     }
 
     public function getOptions($name = null)
@@ -84,6 +104,16 @@ abstract class AbstractControl implements ControlInterface
     public function setParent(ControlInterface $parent)
     {
         $this->parent = $parent;
+    }
+
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    public function setContent($content)
+    {
+        $this->content = $content;
     }
 
 }
