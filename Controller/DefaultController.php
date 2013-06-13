@@ -65,17 +65,17 @@ class DefaultController extends Controller
         $data = array(
             '001' => 'Hola Men',
             '002' => array(
-                'Manuel',
-                ':-) Otro Mas',
+                'singleline_0' => 'Manuel',
+                'singleline_1' => ':-) Otro Mas',
             ),
             '003' => array(
                 'p1' => 'Manuel :-)',
             ),
             '005' => array(
-                'product_0' =>array(
-                    'singleline_0' => 'QUE BIEN VALE',
+                'product_0' => array(
+                    'singleline_0' => 'Ese es el Peo',
                 ),
-                'product_1' =>array(
+                'product_1' => array(
                     'singleline_0' => 'QUE BIEN VALE',
                 ),
             ),
@@ -84,14 +84,17 @@ class DefaultController extends Controller
         var_dump($t->getValues());
         $t->setValues($data);
         var_dump($t->getValues());
-
-        $r = $t->getControls();
-        
-//        var_dump($r['005']->getChildren());
-
         $this->get('commtool_manipulator')->save($t);
 
-        return $this->render('OptimeCommtoolBundle:Default:index.html.twig', array('content' => $t->getContent()));
+        $r = $t->getControls();
+
+//        var_dump($r['002']->getChildren());
+//        var_dump($r['005']->getChildren());
+
+
+        return $this->render('OptimeCommtoolBundle:Default:index.html.twig', array(
+                    'template' => $this->get('commtool_template_factory')->createView($t),
+        ));
     }
 
 }

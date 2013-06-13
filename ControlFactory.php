@@ -125,5 +125,5 @@ class ControlFactory extends ContainerAware
     {
         $this->manipulator = $manipulator;
     }
-
+    
 }

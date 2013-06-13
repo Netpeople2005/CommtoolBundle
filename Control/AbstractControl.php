@@ -3,6 +3,7 @@
 namespace Optime\Bundle\CommtoolBundle\Control;
 
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
+use Optime\Bundle\CommtoolBundle\Control\View\ViewInterface;
 
 abstract class AbstractControl implements ControlInterface
 {
@@ -114,6 +115,17 @@ abstract class AbstractControl implements ControlInterface
     public function setContent($content)
     {
         $this->content = $content;
+    }
+
+    public function createView(ViewInterface $parent = null)
+    {
+        $view = new View\ControlView($this, $parent);
+
+        foreach ($this->getChildren() as $control) {
+            $control->createView($view);
+        }
+
+        return $view;
     }
 
 }

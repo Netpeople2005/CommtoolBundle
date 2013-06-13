@@ -35,6 +35,7 @@ interface TemplateManipulatorInterface
      * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface $section
      */
     public function save(TemplateInterface $template);
+
     public function saveControl(ControlInterface $control, &$content);
 
     /**
@@ -50,5 +51,7 @@ interface TemplateManipulatorInterface
      * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface $parent si se especifica, crea las secciones a partir de esa sección
      * @return array arreglo con las secciones creadas.
      */
-    public function createControls(BuilderInterface $builder,  ControlInterface $parent = null);
+    public function createControls(BuilderInterface $builder, ControlInterface $parent = null);
+
+    public function prepareContentView(TemplateInterface $template, array $controlViews);
 }

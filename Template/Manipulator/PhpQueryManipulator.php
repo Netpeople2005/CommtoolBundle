@@ -99,11 +99,21 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
             $newContent = \phpQuery::newDocument('');
             $selector = $control->getPrototype()->getSelector(false);
 
+            $control->setChildren(array());
+
             foreach ($control->getValue() as $index => $val) {
-                $clone = pq($context->htmlOuter());
+
+                $clone = pq((string) $context);
+
                 $prototype = clone $control->getPrototype();
-                $prototype->setValue($val);
+
                 $clone[$prototype->getSelector(false)]->attr('data-section-id', $index);
+
+                $prototype->setValue($val);
+                $prototype->setIdentifier($index);
+
+                $control->addChild($prototype);
+
                 $this->saveControl($prototype, $clone);
                 $newContent->append($clone->html());
             }
@@ -118,6 +128,26 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
             } else {
                 $context->html($control->getValue());
             }
+        }
+    }
+
+    public function prepareContentView(TemplateInterface $template, array $controlViews)
+    {
+        $content = \phpQuery::newDocument($template->getContent());
+
+        $this->setAttrs($content, $controlViews);
+
+        $c = $template->getControls();
+
+        $template->setContent((string) $content);
+    }
+
+    protected function setAttrs(&$content, array $controlViews)
+    {
+        foreach ($controlViews as $control) {
+            $current = $content[$control->vars['selector']];
+            $current->attr('ng-bind', $control->vars['id']);
+            $this->setAttrs($content, $control->vars['children']);
         }
     }
 

@@ -16,3 +16,7 @@ services:
         class: Optime\Bundle\CommtoolBundle\Template\Manipulator\PhpQueryManipulator
         factory_class: Optime\Bundle\CommtoolBundle\TemplateManipulatorFactory
         arguments: ["@commtool_control_factory"]
+    commtool_twig_extension:
+        class: Optime\Bundle\CommtoolBundle\Twig\Extension\CommtoolExtension
+        tags:
+            - {name: twig.extension}

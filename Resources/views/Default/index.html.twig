@@ -1,5 +1,40 @@
-{#% extends "::base.html.twig" %#}
-
+{% extends "::base.html.twig" %}
+{% import _self as this %}
 {% block body %}
-{{ content }}
+<div ng-app ng-controller="mainCtrl">
+{{ commtool_content(template) }}
+{{ commtool_content(template)|escape('html') }}
+<hr/>
+{{ this.controls(template.controls) }}
+</div>
 {% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript" src="{{ asset('bundles/optimecommtool/js/angular.min.js') }}"></script>
+
+<script type="text/javascript">
+    function mainCtrl($scope){
+        {{ this.scope(template.controls) }}
+    }
+</script>
+{% endblock %}
+
+{% macro controls(controls) %}
+{% import _self as this %}
+{% for c in controls %}
+    <input type="text" ng-model="{{ c.id }}" value="{{ c.vars.value }}" />
+    {{ this.controls(c.vars.children) }}
+{% endfor %}
+{% endmacro %}
+
+{% macro scope(controls) %}
+{% import _self as this %}
+{% for c in controls %}
+    {% if c.vars.children|length > 0 %}
+        $scope.{{ c.id }} = [];
+    {% else %}
+        $scope.{{ c.id }} = '{{ c.vars.value|escape('js') }}';
+    {% endif %}
+    {{ this.scope(c.vars.children) }}
+{% endfor %}
+{% endmacro %}
