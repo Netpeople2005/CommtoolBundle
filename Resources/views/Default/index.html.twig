@@ -9,6 +9,7 @@
 <div ng-repeat="e in loop_pro">
     <textarea ng-model="e.product[0].singleline[0]" ></textarea>
 </div>
+<input type="button" value="Agregar a Loop Sin" ng-click="add()" />
 </div>
 {% endblock %}
 
@@ -22,6 +23,14 @@
         {% for i, controls in template.values %}
             $scope.{{ i }} = {{ controls|json_encode()|raw }};
         {% endfor %}
+        
+        $scope.add = function(){
+            $scope.loop_sin.push({
+                singleline:['Que bien, agregé un elemento :-)']
+            })
+            
+            console.log($scope.loop_sin)
+        }
         
     }
 </script>

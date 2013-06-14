@@ -5,7 +5,6 @@ namespace Optime\Bundle\CommtoolBundle\Control;
 use Optime\Bundle\CommtoolBundle\Control\AbstractControl;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 use Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface;
-use Optime\Bundle\CommtoolBundle\Template\Manipulator\TemplateManipulatorInterface;
 
 class Loop extends AbstractControl implements ControlLoopInterface
 {
@@ -36,9 +35,21 @@ class Loop extends AbstractControl implements ControlLoopInterface
         return 'loop_' . $this->getOptions('selector');
     }
 
-    public function getValue()
+    public function setValue($value)
     {
-        return parent::getValue();
+        $this->value = $value;
+
+        if (!is_array($value)) {
+            throw new \Exception("El control de Tipo {$this->getName()} solo acepta como valor un Arreglo");
+        }
+
+//        foreach ($this->children as $type => $controls) {
+//            foreach ($controls as $index => $control) {
+//                if (isset($value[$index][$type])) {
+//                    $control->setValue($value[$index][$type]);
+//                }
+//            }
+//        }
     }
 
     public function setChildren(array $children)
@@ -58,13 +69,6 @@ class Loop extends AbstractControl implements ControlLoopInterface
     public function getPrototype()
     {
         return $this->prototype;
-    }
-
-    public function addChild(ControlInterface $control)
-    {
-//        if (!isset($this->children[$control->getIdentifier()])) {
-//            $this->children[$control->getIdentifier()] = $control;
-//        }
     }
 
 }

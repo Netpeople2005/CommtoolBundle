@@ -39,7 +39,6 @@ class TemplateFactory
         $template->build($builder, $options);
 
         $manipulator->createControls($builder);
-        var_dump($builder->getControl());
 //        $template->setContent($manipulator->getContent());
 
         $template->setControls($builder->getControls());

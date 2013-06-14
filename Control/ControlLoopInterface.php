@@ -34,6 +34,4 @@ interface ControlLoopInterface
      * @return ControlInterface $control
      */
     public function getPrototype();
-    
-    public function addChild(ControlInterface $control);
 }

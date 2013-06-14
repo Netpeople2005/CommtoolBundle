@@ -5,6 +5,7 @@ namespace Optime\Bundle\CommtoolBundle\Builder;
 use Optime\Bundle\CommtoolBundle\ControlFactory;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
+use Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface;
 
 class Builder implements BuilderInterface
 {
@@ -87,7 +88,11 @@ class Builder implements BuilderInterface
 
         foreach ($this->getControls() as $type => $controls) {
             foreach ($controls as $index => $control) {
-                $values[$type][$index] = $control->getValue();
+                if ($this->parent instanceof ControlLoopInterface) {
+                    $values[0][$type][$index] = $control->getValue();
+                } else {
+                    $values[$type][$index] = $control->getValue();
+                }
             }
         }
 

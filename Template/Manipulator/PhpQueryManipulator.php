@@ -36,12 +36,12 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
 
         if ($parent) {
             $phpQuery = $this->phpQueryCont[$parent->getSelector()]->eq($parent->getIndex());
-//            var_dump($parent->getSelector(), $parent->getIndex());
         } else {
             $phpQuery = $this->phpQueryCont;
         }
-//        var_dump('foreach de ', array_keys($builder->getPrototypes()));
+        
         foreach ($builder->getPrototypes() as $prototype) {
+            
             $selector = $prototype->getSelector(false);
 
             if ($parent) {

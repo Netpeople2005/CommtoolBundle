@@ -12,22 +12,62 @@ class DefaultController extends Controller
     {
 
         $html = $this->render('OptimeCommtoolBundle::template_test.html.twig')->getContent();
-        
+
         $template = new CampaignTemplate();
-        
+
         $this->get('commtool_template_factory')->create($template, $html);
-        
+
         $c = $template->getControls();
+//        echo "<pre>";
+//        print_r($template->getValues());
+
+        $data = array(
+            'singleline' => array('Primer Singleline', 'Segundo Singleline'),
+            'product' => array(
+                array(
+                    'singleline' => array('Primer producto con su primer singleline', 'Primer producto con su segundo singleline'),
+                ),
+                array(
+                    'singleline' => array('Segundo producto con su primer singleline'),
+                    'multiline' => array('Segundo producto con su primer multiline'),
+                ),
+            ),
+            'loop_sin' => array(
+                array(
+                    'singleline' => array('Loop Sin con primer Singleline')
+                ),
+                array(
+                    'singleline' => array('Loop Sin con segundo Singleline')
+                ),
+            ),
+            'loop_pro' => array(
+                array(
+                    'product' => array(
+                        array(
+                            'singleline' => array('Loop Pro con su primer singleline'),
+                        ),
+                    )
+                ),
+                array(
+                    'product' => array(
+                        array(
+                            'singleline' => array('Loop Pro con su segundo singleline'),
+                        ),
+                    )
+                ),
+            ),
+        );
+
+        $template->setValues($data);
+
         echo "<pre>";
         print_r($template->getValues());
-        var_dump($c);
         echo "</pre>";
 
-       
         return $this->render('OptimeCommtoolBundle:Default:index.html.twig', array(
-            'content' => $html,
-            'template' => $template,
-                ));
+                    'content' => $html,
+                    'template' => $template,
+        ));
     }
 
     public function updateSectionsAction()

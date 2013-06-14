@@ -3,6 +3,7 @@
 namespace Optime\Bundle\CommtoolBundle;
 
 use Optime\Bundle\CommtoolBundle\TemplateInterface;
+use Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface;
 
 abstract class AbstractTemplate implements TemplateInterface
 {
@@ -36,7 +37,11 @@ abstract class AbstractTemplate implements TemplateInterface
 
         foreach ($this->getControls() as $type => $controls) {
             foreach ($controls as $index => $control) {
-                $values[$type][$index] = $control->getValue();
+                if ($control instanceof ControlLoopInterface) {
+                    $values[$type] = $control->getValue();
+                } else {
+                    $values[$type][$index] = $control->getValue();
+                }
             }
         }
 
@@ -47,8 +52,14 @@ abstract class AbstractTemplate implements TemplateInterface
     {
         foreach ($this->getControls() as $type => $controls) {
             foreach ($controls as $index => $control) {
-                if (isset($data[$type][$index])) {
-                    $control->setValue($data[$type][$index]);
+                if ($control instanceof ControlLoopInterface) {
+                    if (isset($data[$type])) {
+                        $control->setValue($data[$type]);
+                    }
+                } else {
+                    if (isset($data[$type][$index])) {
+                        $control->setValue($data[$type][$index]);
+                    }
                 }
             }
         }
