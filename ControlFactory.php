@@ -48,7 +48,6 @@ class ControlFactory extends ContainerAware
 
     protected function _create($control, $content, array $options = array())
     {
-        $control->setContent($content);
         $control->setOptions($options);
 
         $builder = new Builder($this, $control);

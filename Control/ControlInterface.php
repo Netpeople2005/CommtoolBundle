@@ -54,10 +54,6 @@ interface ControlInterface
 
     public function setOptions(array $options);
     
-    public function getContent();
-
-    public function setContent($content);
-    
     public function createView(ViewInterface $parent = null);
     
 }

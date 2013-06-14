@@ -8,16 +8,34 @@ use Optime\Bundle\CommtoolBundle\Control\View\ViewInterface;
 abstract class AbstractControl implements ControlInterface
 {
 
+    /**
+     *
+     * @var $value
+     */
     protected $value;
+
+    /**
+     *
+     * @var string
+     */
     protected $identifier;
+
+    /**
+     *
+     * @var array
+     */
     protected $children = array();
-    protected $content;
 
     /**
      *
      * @var ControlInterface
      */
     protected $parent;
+
+    /**
+     *
+     * @var array
+     */
     protected $options = array();
 
     public function getDefaultValue()
@@ -44,9 +62,11 @@ abstract class AbstractControl implements ControlInterface
     {
         $this->value = $value;
         if (is_array($value)) {
-            foreach ($this->children as $control) {
-                if (isset($value[$control->getIdentifier()])) {
-                    $control->setValue($value[$control->getIdentifier()]);
+            foreach ($this->children as $type => $controls) {
+                foreach ($controls as $index => $control) {
+                    if (isset($value[$index])) {
+                        $control->setValue($value[$index]);
+                    }
                 }
             }
         }
@@ -76,9 +96,9 @@ abstract class AbstractControl implements ControlInterface
             $selector = '.' . $this->getName();
         }
 
-        if (null !== $this->getIdentifier()) {
-            $selector .= "[data-section-id={$this->getIdentifier()}]";
-        }
+//        if (null !== $this->getIdentifier()) {
+//            $selector .= "[data-section-id={$this->getIdentifier()}]";
+//        }
 
         return $selector;
     }
@@ -105,16 +125,6 @@ abstract class AbstractControl implements ControlInterface
     public function setParent(ControlInterface $parent)
     {
         $this->parent = $parent;
-    }
-
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    public function setContent($content)
-    {
-        $this->content = $content;
     }
 
     public function createView(ViewInterface $parent = null)

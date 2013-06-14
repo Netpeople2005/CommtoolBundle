@@ -3,6 +3,7 @@
 namespace Optime\Bundle\CommtoolBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Optime\Bundle\CommtoolBundle\CampaignTemplate;
 
 class DefaultController extends Controller
 {
@@ -11,33 +12,17 @@ class DefaultController extends Controller
     {
 
         $html = $this->render('OptimeCommtoolBundle::template_test.html.twig')->getContent();
+        
+        $template = new CampaignTemplate();
+        
+        $this->get('commtool_template_factory')->create($template, $html);
+        
+        $c = $template->getControls();
+        
+        var_dump($c['product'][0]);
 
-        $pq = \phpQuery::newDocument($html);
-
-        $this->get('commtool_template_factory')
-                ->create($t = new \Optime\Bundle\CommtoolBundle\CampaignTemplate(), $html);
-
-        $r = $t->getControls();
-
-        var_dump($r);
-
-        $data = array(
-            '001' => 'Hola Men',
-            '002' => 'Manuel',
-            '003' => array(
-                'p001' => 'Manuel :-)'
-            ),
-        );
-
-        var_dump($t->getValues());
-        $t->setValues($data);
-        var_dump($t->getValues());
-
-        $this->get('commtool_manipulator')->save($t);
-
-        $r = $t->getControls();
-
-        return $this->render('OptimeCommtoolBundle:Default:index.html.twig', array('content' => $t->getContent()));
+       
+        return $this->render('OptimeCommtoolBundle:Default:index.html.twig', array('content' => $html));
     }
 
     public function updateSectionsAction()

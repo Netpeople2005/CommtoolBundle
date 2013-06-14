@@ -85,11 +85,9 @@ class Builder implements BuilderInterface
     {
         $values = array();
 
-        foreach ($this->getControls() as $index => $control) {
-            if (null !== $control->getIdentifier()) {
-                $values[$control->getIdentifier()] = $control->getValue();
-            } else {
-                $values[] = $control->getValue();
+        foreach ($this->getControls() as $type => $controls) {
+            foreach ($controls as $index => $control) {
+                $values[$index] = $control->getValue();
             }
         }
 

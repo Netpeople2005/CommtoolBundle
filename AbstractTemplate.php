@@ -27,15 +27,13 @@ abstract class AbstractTemplate implements TemplateInterface
 
     public function setControls(array $controls)
     {
-        foreach ($controls as $control) {
-            $this->controls[$control->getIdentifier()] = $control;
-        }
+        $this->controls = $controls;
     }
 
     public function getValues()
     {
         $values = array();
-        
+
         foreach ($this->getControls() as $control) {
             $values[$control->getIdentifier()] = $control->getValue();
         }

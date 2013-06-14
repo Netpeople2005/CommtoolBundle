@@ -40,25 +40,31 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
         }
 
         foreach ($builder->getPrototypes() as $prototype) {
-            $items = $phpQuery[$prototype->getSelector(false)];
+            $selector = $prototype->getSelector(false);
+            $items = $phpQuery[$selector];
             foreach ($items as $index => $el) {
                 $el = pq($el);
                 $control = $this->factory->createFromPrototype($prototype, $el, $prototype->getOptions());
-                if ($el->attr('data-section-id')) {
-                    $id = $el->attr('data-section-id');
-                } else {
-                    $id = $prototype->getName() . '_' . $index;
-                    $el->attr('data-section-id', $id);
-                }
-                $control->setIdentifier($id);
-                if ($prototype->getParent()) {
-                    $control->setParent($prototype->getParent());
-                }
-                $controls[$id] = $control;
+                $control->setIdentifier($this->createId($index, $control));
+                $controls[$prototype->getName()][$index] = $control;
             }
         }
 
         $builder->setControls($controls);
+    }
+
+    public function createId($index, ControlInterface $control)
+    {
+        $id = array();
+
+        if ($control->getParent()) {
+            var_dump($control->getParent());die;
+            $id[] = trim($control->getParent()->getIdentifier());
+        }
+
+        $id[] = $control->getName() . '[' . $index . ']';
+
+        return join('.', $id);
     }
 
     public function exists(ControlInterface $section)
