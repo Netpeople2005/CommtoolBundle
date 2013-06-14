@@ -1,5 +1,4 @@
 parameters:
-#    optime_commtool.example.class: Optime\Bundle\CommtoolBundle\Example
 
 services:
     commtool_template_factory:
