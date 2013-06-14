@@ -48,19 +48,23 @@ class ControlFactory extends ContainerAware
 
     protected function _create($control, $content, array $options = array())
     {
-        $control->setOptions($options);
 
         $builder = new Builder($this, $control);
 
         $control->build($builder, $options);
 
-        if ($content && count($builder->getPrototypes())) {
+        if (count($builder->getPrototypes())) {
 
-            $this->manipulator->createControls($builder, $control);
+            $options['has_children'] = true;
 
-            $control->setChildren($builder->getControls());
+            if ($content) {
 
-            $control->setValue($builder->getValues());
+                $this->manipulator->createControls($builder, $control);
+
+                $control->setChildren($builder->getControls());
+
+                $control->setValue($builder->getValues());
+            }
         } else {
             if ($content instanceof \phpQueryObject) {
                 $control->setValue(trim($content->html()));
@@ -68,6 +72,8 @@ class ControlFactory extends ContainerAware
                 $control->setValue(trim((string) $content));
             }
         }
+
+        $control->setOptions($options);
 
         return $control;
     }
@@ -124,5 +130,5 @@ class ControlFactory extends ContainerAware
     {
         $this->manipulator = $manipulator;
     }
-    
+
 }

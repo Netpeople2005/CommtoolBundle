@@ -87,7 +87,7 @@ class Builder implements BuilderInterface
 
         foreach ($this->getControls() as $type => $controls) {
             foreach ($controls as $index => $control) {
-                $values[$index] = $control->getValue();
+                $values[$type][$index] = $control->getValue();
             }
         }
 

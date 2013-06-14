@@ -1,21 +1,21 @@
-<span class="singleline" ng-bind="singleline[0]">Hola Mundo</span>
-<div class="product">
-    <span class="product_singleline" ng-bind="product[0].singleline[0]">Hola Mundo</span>    
+<span class="singleline section" ng-bind="singleline[0]">Hola Mundo 0</span>
+<div class="product section">
+    <span class="singleline section" ng-bind="product[0].singleline[0]">Hola Mundo, product 0</span>    
 </div>
-{#<div class="product" data-section-id="003">
+<div class="product section">
     <table>
         <tr>
-            <td class="product_singleline" ng-bind="product.singleline" data-section-id="p1">Texto Inicial</td>
-            <td class="product_multiline" ng-bind="product.multiline" >Texto Inicial</td>
+            <td class="singleline section" ng-bind="product[1].singleline[0]">Texto Inicial sin 0</td>
+            <td class="multiline section" ng-bind="product[1].multiline[0]" >Texto Inicial mul 0</td>
         </tr>
     </table>
 </div>
-<div ng-repeat="e in loop_002"><span ng-bind="e.singleline">test</span></div>
+<div class="loop_sin section" ng-repeat="e in loop_sin"><span class="singleline section" ng-bind="e.singleline[0]">test</span></div>
 
-<div ng-repeat="e in loop_002">
-    <div class="loop_product">
-        <p class="product_singleline" ng-bind="e.singleline1">JEJEJE</p>
+<div class="loop_pro section" ng-repeat="e in loop_pro">
+    <div class="product section">
+        <p class="singleline section" ng-bind="e.product[0].singleline[0]">JEJEJE</p>
     </div>
 </div>
 
-<span class="singleline" ng-bind="singleline1">Hola Mundo</span>#}
+<span class="singleline section" ng-bind="singleline[1]">Hola Mundo 1</span>

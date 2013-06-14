@@ -4,6 +4,7 @@ namespace Optime\Bundle\CommtoolBundle\Control;
 
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
 use Optime\Bundle\CommtoolBundle\Control\View\ViewInterface;
+use Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface;
 
 abstract class AbstractControl implements ControlInterface
 {
@@ -13,6 +14,12 @@ abstract class AbstractControl implements ControlInterface
      * @var $value
      */
     protected $value;
+
+    /**
+     *
+     * @var string
+     */
+    protected $index;
 
     /**
      *
@@ -48,6 +55,16 @@ abstract class AbstractControl implements ControlInterface
         return $this->value;
     }
 
+    public function getIndex()
+    {
+        return $this->index;
+    }
+
+    public function setIndex($index)
+    {
+        $this->index = $index;
+    }
+
     public function getIdentifier()
     {
         return $this->identifier;
@@ -64,8 +81,8 @@ abstract class AbstractControl implements ControlInterface
         if (is_array($value)) {
             foreach ($this->children as $type => $controls) {
                 foreach ($controls as $index => $control) {
-                    if (isset($value[$index])) {
-                        $control->setValue($value[$index]);
+                    if (isset($value[$type][$index])) {
+                        $control->setValue($value[$type][$index]);
                     }
                 }
             }
@@ -85,20 +102,11 @@ abstract class AbstractControl implements ControlInterface
     public function getSelector($useParent = true)
     {
 
-        if ($this->getParent()) {
-            $parent = $this->getParent();
-            if ($useParent) {
-                $selector = $parent->getSelector() . ' .' . $parent->getName() . '_' . $this->getName();
-            } else {
-                $selector = '.' . $parent->getName() . '_' . $this->getName();
-            }
+        if ($useParent && $this->getParent()) {
+            $selector = $this->getParent()->getSelector() . ' .' . $this->getName();
         } else {
             $selector = '.' . $this->getName();
         }
-
-//        if (null !== $this->getIdentifier()) {
-//            $selector .= "[data-section-id={$this->getIdentifier()}]";
-//        }
 
         return $selector;
     }

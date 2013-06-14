@@ -32,37 +32,49 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
     public function createControls(BuilderInterface $builder, ControlInterface $parent = null)
     {
         $controls = array();
+        $vals = array();
 
         if ($parent) {
-            $phpQuery = $this->phpQueryCont[$parent->getSelector()];
+            $phpQuery = $this->phpQueryCont[$parent->getSelector()]->eq($parent->getIndex());
+//            var_dump($parent->getSelector(), $parent->getIndex());
         } else {
             $phpQuery = $this->phpQueryCont;
         }
-
+//        var_dump('foreach de ', array_keys($builder->getPrototypes()));
         foreach ($builder->getPrototypes() as $prototype) {
             $selector = $prototype->getSelector(false);
-            $items = $phpQuery[$selector];
+
+            if ($parent) {
+                $prototype->setParent($parent);
+            }
+
+            $phpQueryTemp = $phpQuery->clone();
+
+            $phpQueryTemp['.section']->not($selector)->remove();
+
+            $items = $phpQueryTemp[$selector];
             foreach ($items as $index => $el) {
                 $el = pq($el);
+                $prototype->setIndex($index);
+                $prototype->setIdentifier($this->createId($prototype));
                 $control = $this->factory->createFromPrototype($prototype, $el, $prototype->getOptions());
-                $control->setIdentifier($this->createId($index, $control));
                 $controls[$prototype->getName()][$index] = $control;
+                $vals[$prototype->getName()][$index] = $control->getValue();
             }
         }
 
         $builder->setControls($controls);
     }
 
-    public function createId($index, ControlInterface $control)
+    public function createId(ControlInterface $control)
     {
         $id = array();
 
         if ($control->getParent()) {
-            var_dump($control->getParent());die;
             $id[] = trim($control->getParent()->getIdentifier());
         }
 
-        $id[] = $control->getName() . '[' . $index . ']';
+        $id[] = $control->getName() . '[' . $control->getIndex() . ']';
 
         return join('.', $id);
     }
@@ -84,11 +96,11 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
 
     public function save(TemplateInterface $template)
     {
-        $content = \phpQuery::newDocument($template->getContent());
-        foreach ($template->getControls() as $control) {
-            $this->saveControl($control, $content);
-        }
-        $template->setContent((string) $content);
+//        $content = \phpQuery::newDocument($template->getContent());
+//        foreach ($template->getControls() as $control) {
+//            $this->saveControl($control, $content);
+//        }
+//        $template->setContent((string) $content);
     }
 
     public function setContent($content)
@@ -98,43 +110,43 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
 
     public function saveControl(ControlInterface $control, &$content)
     {
-        $context = $content[$control->getSelector(false)];
-
-        if ($control instanceof ControlLoopInterface) {
-
-            $newContent = \phpQuery::newDocument('');
-            $selector = $control->getPrototype()->getSelector(false);
-
-            $control->setChildren(array());
-
-            foreach ($control->getValue() as $index => $val) {
-
-                $clone = pq((string) $context);
-
-                $prototype = clone $control->getPrototype();
-
-                $clone[$prototype->getSelector(false)]->attr('data-section-id', $index);
-
-                $prototype->setValue($val);
-                $prototype->setIdentifier($index);
-
-                $control->addChild($prototype);
-
-                $this->saveControl($prototype, $clone);
-                $newContent->append($clone->html());
-            }
-
-            $context->html($newContent);
-        } else {
-
-            if (count($control->getChildren())) {
-                foreach ($control->getChildren() as $child) {
-                    $this->saveControl($child, $context);
-                }
-            } else {
-                $context->html($control->getValue());
-            }
-        }
+//        $context = $content[$control->getSelector(false)];
+//
+//        if ($control instanceof ControlLoopInterface) {
+//
+//            $newContent = \phpQuery::newDocument('');
+//            $selector = $control->getPrototype()->getSelector(false);
+//
+//            $control->setChildren(array());
+//
+//            foreach ($control->getValue() as $index => $val) {
+//
+//                $clone = pq((string) $context);
+//
+//                $prototype = clone $control->getPrototype();
+//
+//                $clone[$prototype->getSelector(false)]->attr('data-section-id', $index);
+//
+//                $prototype->setValue($val);
+//                $prototype->setIdentifier($index);
+//
+//                $control->addChild($prototype);
+//
+//                $this->saveControl($prototype, $clone);
+//                $newContent->append($clone->html());
+//            }
+//
+//            $context->html($newContent);
+//        } else {
+//
+//            if (count($control->getChildren())) {
+//                foreach ($control->getChildren() as $child) {
+//                    $this->saveControl($child, $context);
+//                }
+//            } else {
+//                $context->html($control->getValue());
+//            }
+//        }
     }
 
     public function prepareContentView(TemplateInterface $template, array $controlViews)

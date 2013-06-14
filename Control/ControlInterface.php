@@ -38,6 +38,10 @@ interface ControlInterface
 
     public function getIdentifier();
 
+    public function getIndex();
+
+    public function setIndex($id);
+
     public function setIdentifier($identifier);
 
     public function getChildren();
@@ -53,7 +57,6 @@ interface ControlInterface
     public function getOptions($name = null);
 
     public function setOptions(array $options);
-    
+
     public function createView(ViewInterface $parent = null);
-    
 }

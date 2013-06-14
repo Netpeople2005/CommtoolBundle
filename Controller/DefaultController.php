@@ -18,11 +18,16 @@ class DefaultController extends Controller
         $this->get('commtool_template_factory')->create($template, $html);
         
         $c = $template->getControls();
-        
-        var_dump($c['product'][0]);
+        echo "<pre>";
+        print_r($template->getValues());
+        var_dump($c);
+        echo "</pre>";
 
        
-        return $this->render('OptimeCommtoolBundle:Default:index.html.twig', array('content' => $html));
+        return $this->render('OptimeCommtoolBundle:Default:index.html.twig', array(
+            'content' => $html,
+            'template' => $template,
+                ));
     }
 
     public function updateSectionsAction()

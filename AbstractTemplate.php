@@ -34,8 +34,10 @@ abstract class AbstractTemplate implements TemplateInterface
     {
         $values = array();
 
-        foreach ($this->getControls() as $control) {
-            $values[$control->getIdentifier()] = $control->getValue();
+        foreach ($this->getControls() as $type => $controls) {
+            foreach ($controls as $index => $control) {
+                $values[$type][$index] = $control->getValue();
+            }
         }
 
         return $values;
@@ -43,9 +45,11 @@ abstract class AbstractTemplate implements TemplateInterface
 
     public function setValues($data)
     {
-        foreach ($this->getControls() as $identifier => $control) {
-            if (isset($data[$identifier])) {
-                $control->setValue($data[$identifier]);
+        foreach ($this->getControls() as $type => $controls) {
+            foreach ($controls as $index => $control) {
+                if (isset($data[$type][$index])) {
+                    $control->setValue($data[$type][$index]);
+                }
             }
         }
     }

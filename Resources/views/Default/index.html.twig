@@ -3,7 +3,12 @@
 {% block body %}
 <div ng-app ng-controller="mainCtrl">
 {{ content|raw }}
-<textarea ng-model="s.singleline[0]" ></textarea>
+<textarea ng-model="singleline[0]" ></textarea>
+<textarea ng-model="product[0].singleline[0]" ></textarea>
+<textarea ng-model="loop_sin.0.singleline[0]" ></textarea>
+<div ng-repeat="e in loop_pro">
+    <textarea ng-model="e.product[0].singleline[0]" ></textarea>
+</div>
 </div>
 {% endblock %}
 
@@ -13,10 +18,11 @@
 
 <script type="text/javascript">
     function mainCtrl($scope){
+                
+        {% for i, controls in template.values %}
+            $scope.{{ i }} = {{ controls|json_encode()|raw }};
+        {% endfor %}
         
-        $scope.s = {
-            singleline: ['Que bien ;)']
-        }
     }
 </script>
 {% endblock %}

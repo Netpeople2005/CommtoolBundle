@@ -33,13 +33,14 @@ class TemplateFactory
         $manipulator = $this->controlFactory->getManipulator();
 
         $manipulator->setContent($content);
+        
         $builder = new Builder($this->controlFactory, null);
 
         $template->build($builder, $options);
 
         $manipulator->createControls($builder);
-
-        $template->setContent($manipulator->getContent());
+        var_dump($builder->getControl());
+//        $template->setContent($manipulator->getContent());
 
         $template->setControls($builder->getControls());
     }
