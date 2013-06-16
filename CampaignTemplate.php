@@ -10,7 +10,11 @@ class CampaignTemplate extends AbstractTemplate
 
     public function build(BuilderInterface $builder, array $options = array())
     {
-        $builder->add('singleline');
+        $builder->add('singleline', array(
+            'data' => function(SectionConfig $section) {
+                
+            },
+        ));
         $builder->add('product');
         $builder->add('loop', array(
             'type' => 'singleline',

@@ -6,7 +6,6 @@ use Optime\Bundle\CommtoolBundle\ControlFactory;
 use Optime\Bundle\CommtoolBundle\TemplateInterface;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
-use Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface;
 use Optime\Bundle\CommtoolBundle\Template\Manipulator\TemplateManipulatorInterface;
 
 class PhpQueryManipulator implements TemplateManipulatorInterface
