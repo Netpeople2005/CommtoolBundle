@@ -2,10 +2,10 @@
 
 namespace Optime\Bundle\CommtoolBundle;
 
-use Optime\Bundle\CommtoolBundle\AbstractTemplate;
+use Optime\Bundle\CommtoolBundle\AbstractCommtoolBuilder;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 
-class CampaignTemplate extends AbstractTemplate
+class CampaignCommtool extends AbstractCommtoolBuilder
 {
 
     public function build(BuilderInterface $builder, array $options = array())

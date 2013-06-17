@@ -3,7 +3,7 @@
 namespace Optime\Bundle\CommtoolBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Optime\Bundle\CommtoolBundle\CampaignTemplate;
+use Optime\Bundle\CommtoolBundle\CampaignCommtool;
 
 class DefaultController extends Controller
 {
@@ -11,13 +11,16 @@ class DefaultController extends Controller
     public function indexAction()
     {
 
-        $html = $this->render('OptimeCommtoolBundle::template_test.html.twig')->getContent();
+        $commtool = new CampaignCommtool();
 
-        $template = new CampaignTemplate();
+        $template = $this->getDoctrine()
+                ->getManager()
+                ->getRepository('CommtoolTemplateBundle:Template')
+                ->find(7);
 
-        $this->get('commtool_template_factory')->create($template, $html);
+        $this->get('commtool_factory')->create($commtool, $template);
 
-        $c = $template->getControls();
+        $c = $commtool->getControls();
 //        echo "<pre>";
 //        print_r($template->getValues());
 
@@ -58,15 +61,14 @@ class DefaultController extends Controller
             ),
         );
 
-        $template->setValues($data);
+        $commtool->setValues($data);
 
         echo "<pre>";
-        print_r($template->getValues());
+        print_r($commtool->getValues());
         echo "</pre>";
 
         return $this->render('OptimeCommtoolBundle:Default:index.html.twig', array(
-                    'content' => $html,
-                    'template' => $template,
+                    'template' => $commtool,
         ));
     }
 

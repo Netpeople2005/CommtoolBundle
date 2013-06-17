@@ -2,7 +2,7 @@
 
 namespace Optime\Bundle\CommtoolBundle\Template\Manipulator;
 
-use Optime\Bundle\CommtoolBundle\TemplateInterface;
+use Optime\Bundle\CommtoolBundle\CommtoolBuilderInterface;
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 
@@ -28,13 +28,13 @@ interface TemplateManipulatorInterface
      * del manipulador
      * @param ControlInterface $section
      */
-    public function load(TemplateInterface $template);
+    public function load(CommtoolBuilderInterface $template);
 
     /**
      * Guarda en el content actual, el valor de la sección.
      * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface $section
      */
-    public function save(TemplateInterface $template);
+    public function save(CommtoolBuilderInterface $template);
 
     public function saveControl(ControlInterface $control, &$content);
 
@@ -53,5 +53,5 @@ interface TemplateManipulatorInterface
      */
     public function createControls(BuilderInterface $builder, ControlInterface $parent = null);
 
-    public function prepareContentView(TemplateInterface $template, array $controlViews);
+    public function prepareContentView(CommtoolBuilderInterface $template, array $controlViews);
 }

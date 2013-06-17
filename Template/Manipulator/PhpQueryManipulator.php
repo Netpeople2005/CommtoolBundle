@@ -3,7 +3,7 @@
 namespace Optime\Bundle\CommtoolBundle\Template\Manipulator;
 
 use Optime\Bundle\CommtoolBundle\ControlFactory;
-use Optime\Bundle\CommtoolBundle\TemplateInterface;
+use Optime\Bundle\CommtoolBundle\CommtoolBuilderInterface;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
 use Optime\Bundle\CommtoolBundle\Template\Manipulator\TemplateManipulatorInterface;
@@ -88,12 +88,12 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
         return $this->phpQueryCont->htmlOuter();
     }
 
-    public function load(TemplateInterface $template)
+    public function load(CommtoolBuilderInterface $template)
     {
         
     }
 
-    public function save(TemplateInterface $template)
+    public function save(CommtoolBuilderInterface $template)
     {
 //        $content = \phpQuery::newDocument($template->getContent());
 //        foreach ($template->getControls() as $control) {
@@ -148,7 +148,7 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
 //        }
     }
 
-    public function prepareContentView(TemplateInterface $template, array $controlViews)
+    public function prepareContentView(CommtoolBuilderInterface $template, array $controlViews)
     {
         $content = \phpQuery::newDocument($template->getContent());
 

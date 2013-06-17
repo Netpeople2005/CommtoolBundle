@@ -1,0 +1,23 @@
+<span class="singleline section" ng-bind="singleline[0]">Hola Mundo 0</span>
+<div class="product section">
+    <span class="singleline section" ng-bind="product[0].singleline[0]">Hola Mundo, product 0</span>    
+    <span class="singleline section" ng-bind="product[0].singleline[1]">Hola Mundo, product 0</span>    
+</div>
+<div class="product section">
+    <table>
+        <tr>
+            <td class="singleline section" ng-bind="product[1].singleline[0]">Texto Inicial sin 0</td>
+            <td class="multiline section" ng-bind="product[1].multiline[0]" >Texto Inicial mul 0</td>
+        </tr>
+    </table>
+</div>
+<div class="loop_sin section" ng-repeat="e in loop_sin"><span class="singleline section" ng-bind="e.singleline[0]">test</span></div>
+
+<div class="loop_pro section" ng-repeat="e in loop_pro">
+    <div class="product section">
+        <p class="singleline section" ng-bind="e.product[0].singleline[0]">JEJEJE</p>
+    </div>
+</div>
+
+<span class="singleline section" ng-bind="singleline[1]">Hola Mundo 1</span>
+<img ng-src1="{{'{{aaa}}'}}" ng-bind-src="aaa"/>

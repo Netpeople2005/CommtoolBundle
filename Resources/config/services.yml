@@ -1,9 +1,9 @@
 parameters:
 
 services:
-    commtool_template_factory:
-        class: Optime\Bundle\CommtoolBundle\TemplateFactory
-        arguments: ["@commtool_control_factory"]
+    commtool_factory:
+        class: Optime\Bundle\CommtoolBundle\CommtoolFactory
+        arguments: ["@commtool_control_factory", "@twig"]
     commtool_control_factory:
         class: Optime\Bundle\CommtoolBundle\ControlFactory
         arguments: 

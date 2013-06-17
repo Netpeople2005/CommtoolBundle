@@ -2,10 +2,10 @@
 
 namespace Optime\Bundle\CommtoolBundle;
 
-use Optime\Bundle\CommtoolBundle\TemplateInterface;
+use Optime\Bundle\CommtoolBundle\CommtoolBuilderInterface;
 use Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface;
 
-abstract class AbstractTemplate implements TemplateInterface
+abstract class AbstractCommtoolBuilder implements CommtoolBuilderInterface
 {
 
     protected $content;
