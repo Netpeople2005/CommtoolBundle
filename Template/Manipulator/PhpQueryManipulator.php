@@ -38,9 +38,9 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
         } else {
             $phpQuery = $this->phpQueryCont;
         }
-        
+
         foreach ($builder->getPrototypes() as $prototype) {
-            
+
             $selector = $prototype->getSelector(false);
 
             if ($parent) {
@@ -88,9 +88,15 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
         return $this->phpQueryCont->htmlOuter();
     }
 
-    public function load(CommtoolBuilderInterface $template)
+    public function load(ControlInterface $control)
     {
-        
+        $part = $this->phpQueryCont["[data-id={$control->getIdentifier()}]"];
+
+        if ($part->is('img')) {
+            $control->setValue($part->attr('src'));
+        } else {
+            $control->setValue($part->html());
+        }
     }
 
     public function save(CommtoolBuilderInterface $template)

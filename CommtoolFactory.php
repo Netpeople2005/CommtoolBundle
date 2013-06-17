@@ -33,12 +33,14 @@ class CommtoolFactory
     , TemplateInterface $template, array $options = array())
     {
         $manipulator = $this->controlFactory->getManipulator();
-        
+
         $manipulator->setContent($this->getContent($template));
 
         $builder = new Builder($this->controlFactory, null);
 
         $commtoolBuilder->build($builder, $options);
+
+        $this->createControls($builder->getPrototypes(), $template->getSections());
 
         $manipulator->createControls($builder);
 
@@ -70,6 +72,18 @@ class CommtoolFactory
     protected function getContent(TemplateInterface $template)
     {
         return $this->twig->render($template->getView());
+    }
+
+    public function createControls(array $sections, $templateSections)
+    {
+        $controls = array();
+        foreach ($templateSections as $section) {
+            if (isset($sections[$section->getName()])) {
+                $prototype = $sections[$section->getName()];
+                $control = $this->controlFactory->createFromPrototype($prototype, $section);
+            }
+        }
+        die;
     }
 
 }

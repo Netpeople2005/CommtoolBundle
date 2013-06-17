@@ -34,7 +34,7 @@ class Builder implements BuilderInterface
 
     public function add($sectionName, array $options = array())
     {
-        $prototype = $this->factory->create($sectionName, null, $options);
+        $prototype = $this->factory->create($sectionName, $options);
 
         if (isset($this->prototypes[$prototype->getSelector()])) {
             throw new \Exception("No se puede agregar más de una sección que use el mismo selector");
@@ -42,9 +42,9 @@ class Builder implements BuilderInterface
 
         $prototype->setOptions($options);
 
-        $this->prototypes[$prototype->getSelector()] = $prototype;
+        $this->prototypes[$prototype->getName()] = $prototype;
 
-        $this->sections[$prototype->getSelector()] = $prototype->getSelector();
+        $this->sections[$prototype->getName()] = $prototype->getSelector();
 
         if ($this->parent) {
             $prototype->setParent($this->parent);

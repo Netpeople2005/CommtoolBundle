@@ -28,7 +28,7 @@ interface TemplateManipulatorInterface
      * del manipulador
      * @param ControlInterface $section
      */
-    public function load(CommtoolBuilderInterface $template);
+    public function load(ControlInterface $control);
 
     /**
      * Guarda en el content actual, el valor de la sección.

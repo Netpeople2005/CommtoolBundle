@@ -5,6 +5,7 @@ namespace Optime\Bundle\CommtoolBundle;
 use Optime\Bundle\CommtoolBundle\Builder\Builder;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
+use Optime\Commtool\TemplateBundle\Model\SectionConfigInterface;
 use Optime\Bundle\CommtoolBundle\Template\Manipulator\TemplateManipulatorInterface;
 
 class ControlFactory extends ContainerAware
@@ -29,9 +30,9 @@ class ControlFactory extends ContainerAware
      * @param array $options
      * @return ControlInterface
      */
-    public function create($name, $content, array $options = array())
+    public function create($name, array $options = array())
     {
-        return $this->_create($this->resolveControl($name), $content, $options);
+        return $this->_create($this->resolveControl($name), $options);
     }
 
     /**
@@ -41,12 +42,23 @@ class ControlFactory extends ContainerAware
      * @param array $options
      * @return ControlInterface
      */
-    public function createFromPrototype(ControlInterface $control, $content, array $options = array())
+    public function createFromPrototype(ControlInterface $control, SectionConfigInterface $config)
     {
-        return $this->_create(clone $control, $content, $options);
+        $control = clone $control;
+
+        $control->setIdentifier($config->getIdentifier());
+        $control->setOptions($config->getConfig());
+
+        $this->manipulator->load($control);
+        
+        if ($control->getChildren() and $config->getChildren()) {
+//            foreach($control->getChildren())
+            var_dump($config->getChildren());die;
+        }
+        return $control;
     }
 
-    protected function _create($control, $content, array $options = array())
+    protected function _create($control, array $options = array())
     {
 
         $builder = new Builder($this, $control);
@@ -57,20 +69,20 @@ class ControlFactory extends ContainerAware
 
             $options['has_children'] = true;
 
-            if ($content) {
+//            if ($content) {
 
-                $this->manipulator->createControls($builder, $control);
-
-                $control->setChildren($builder->getControls());
-
-                $control->setValue($builder->getValues());
-            }
+//                $this->manipulator->createControls($builder, $control);
+//
+//                $control->setChildren($builder->getControls());
+//
+//                $control->setValue($builder->getValues());
+//            }
         } else {
-            if ($content instanceof \phpQueryObject) {
-                $control->setValue(trim($content->html()));
-            } else {
-                $control->setValue(trim((string) $content));
-            }
+//            if ($content instanceof \phpQueryObject) {
+//                $control->setValue(trim($content->html()));
+//            } else {
+//                $control->setValue(trim((string) $content));
+//            }
         }
 
         $control->setOptions($options);

@@ -10,7 +10,6 @@ class DefaultController extends Controller
 
     public function indexAction()
     {
-
         $commtool = new CampaignCommtool();
 
         $template = $this->getDoctrine()
