@@ -1,9 +1,12 @@
 {% extends "::base.html.twig" %}
 
+{% set controls = template.controls %}
+
 {% block body %}
 <div ng-app ng-controller="MainCtrl">
 {{ template.content|raw }}
-{<textarea ng-model="s_sing_1" ></textarea>
+<hr/>
+{{ commtool_controls(template) }}
 </div>
 {% endblock %}
 

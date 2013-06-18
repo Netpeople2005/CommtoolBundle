@@ -1,0 +1,25 @@
+{% block control_singleline %}
+    <label>{{ label }}</label>
+    {% if options['config'].is_interactive %}
+        <input type="text" ng-model="{{ id }}" />
+    {% endif %}
+{% endblock %}
+
+{% block control_multiline %}
+    <label>{{ label }}</label>
+    {% if options['config'].is_interactive %}
+        <textarea type="text" ng-model="{{ id }}"></textarea>
+    {% endif %}
+{% endblock %}
+
+{% block control_product %}
+    <label>{{ label }}</label>
+    {{ commtool_singleline(children[0]) }}
+{% endblock %}
+
+{% block controls %}
+    <label>{{ label }}</label>
+    {% if options['config'].is_interactive %}
+        <textarea type="text" ng-model="{{ id }}"></textarea>
+    {% endif %}
+{% endblock %}

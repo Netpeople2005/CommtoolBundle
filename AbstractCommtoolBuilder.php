@@ -3,7 +3,6 @@
 namespace Optime\Bundle\CommtoolBundle;
 
 use Optime\Bundle\CommtoolBundle\CommtoolBuilderInterface;
-use Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface;
 
 abstract class AbstractCommtoolBuilder implements CommtoolBuilderInterface
 {

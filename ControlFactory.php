@@ -47,10 +47,11 @@ class ControlFactory extends ContainerAware
     {
         $control = clone $control;
         $control->setIdentifier($config->getIdentifier());
+        $control->setIndex($config->getCompleteIdentifier());
 
         $options = $control->getOptions();
 
-        if (isset($options['config'])) {
+        if (isset($options['config']) and is_array($options['config'])) {
             $options['config'] = array_merge($options['config'], $config->getConfig());
         } else {
             $options['config'] = $config->getConfig();
@@ -78,9 +79,13 @@ class ControlFactory extends ContainerAware
             $control->setChildren($controls);
         }
 
+        $this->manipulator->load($control);
 
         if (isset($options['data'])) {
             if (is_callable($options['data'])) {
+                if (null === $value) {
+                    $value = $control->getValue();
+                }
                 $value = call_user_func($options['data'], $config, $value);
                 $control->setValue($value);
             } else {
@@ -88,9 +93,9 @@ class ControlFactory extends ContainerAware
             }
         } else if (null !== $value) {
             $control->setValue($value);
-        } else {
-            $this->manipulator->load($control);
         }
+
+        $control->setOptions($options);
 
         return $control;
     }

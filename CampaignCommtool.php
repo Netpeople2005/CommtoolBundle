@@ -12,7 +12,7 @@ class CampaignCommtool extends AbstractCommtoolBuilder
     public function build(BuilderInterface $builder, array $options = array())
     {
         $builder->add('singleline', array(
-            'data' => function(SectionConfigInterface $section) {
+            'data' => function(SectionConfigInterface $section, $value) {
                 return 'Hola Mundo';
             },
         ));
