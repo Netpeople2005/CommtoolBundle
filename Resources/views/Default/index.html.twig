@@ -1,24 +1,18 @@
 {% extends "::base.html.twig" %}
-{% import _self as this %}
+
 {% block body %}
-<div ng-app ng-controller="mainCtrl">
+<div ng-app ng-controller="MainCtrl">
 {{ template.content|raw }}
-{#<textarea ng-model="singleline[0]" ></textarea>
-<textarea ng-model="product[0].singleline[0]" ></textarea>
-<textarea ng-model="loop_sin.0.singleline[0]" ></textarea>
-<div ng-repeat="e in loop_pro">
-    <textarea ng-model="e.product[0].singleline[0]" ></textarea>
+{<textarea ng-model="s_sing_1" ></textarea>
 </div>
-<input type="button" value="Agregar a Loop Sin" ng-click="add()" />
-</div>#}
 {% endblock %}
 
-{#% block javascripts %}
+{% block javascripts %}
 <script type="text/javascript" src="{{ asset('bundles/optimecommtool/js/jquery.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('bundles/optimecommtool/js/angular.min.js') }}"></script>
 
 <script type="text/javascript">
-    function mainCtrl($scope){
+    function MainCtrl($scope){
                 
         {% for i, controls in template.values %}
             $scope.{{ i }} = {{ controls|json_encode()|raw }};
@@ -35,4 +29,4 @@
         $scope.aaa = "{{ asset("bundles/commtooltemplate/images/img_01a.jpg") }}"
     }
 </script>
-{% endblock %#}
+{% endblock %}

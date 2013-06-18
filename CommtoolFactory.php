@@ -7,6 +7,8 @@ use Optime\Bundle\CommtoolBundle\ControlFactory;
 use Optime\Bundle\CommtoolBundle\Builder\Builder;
 use Optime\Bundle\CommtoolBundle\CommtoolBuilderInterface;
 use Optime\Commtool\TemplateBundle\Model\TemplateInterface;
+use Optime\Commtool\TemplateBundle\Model\SectionConfigInterface;
+use Optime\Commtool\TemplateBundle\Twig\Extension\SectionExtension;
 
 class CommtoolFactory
 {
@@ -23,10 +25,18 @@ class CommtoolFactory
      */
     protected $twig;
 
-    function __construct(ControlFactory $controlFactory, \Twig_Environment $twig)
+    /**
+     *
+     * @var SectionExtension
+     */
+    protected $sectionExtension;
+
+    function __construct(ControlFactory $controlFactory, \Twig_Environment $twig
+    , SectionExtension $sectionExtension)
     {
         $this->controlFactory = $controlFactory;
         $this->twig = $twig;
+        $this->sectionExtension = $sectionExtension;
     }
 
     public function create(CommtoolBuilderInterface $commtoolBuilder
@@ -38,15 +48,21 @@ class CommtoolFactory
 
         $builder = new Builder($this->controlFactory, null);
 
+        $options['template'] = $template;
+
         $commtoolBuilder->build($builder, $options);
 
-        $this->createControls($builder->getPrototypes(), $template->getSections());
+        if (isset($options['data'])) {
+            $value = $options['data'];
+        } else {
+            $value = array();
+        }
 
-        $manipulator->createControls($builder);
+        $controls = $this->createControls($builder->getPrototypes(), $template->getSections(), $value);
 
         $commtoolBuilder->setContent($manipulator->getContent());
 
-        $commtoolBuilder->setControls($builder->getControls());
+        $commtoolBuilder->setControls($controls);
     }
 
     /**
@@ -69,21 +85,37 @@ class CommtoolFactory
         return $view;
     }
 
-    protected function getContent(TemplateInterface $template)
-    {
-        return $this->twig->render($template->getView());
-    }
-
-    public function createControls(array $sections, $templateSections)
+    public function createControls(array $prototypes, $templateSections, array $values = array())
     {
         $controls = array();
+        //filtramos solo las secciones que no posean padres en primera instancia.
+        $templateSections = array_filter($templateSections->toArray(), function(SectionConfigInterface $sec) {
+                    return null === $sec->getParent();
+                });
+
         foreach ($templateSections as $section) {
-            if (isset($sections[$section->getName()])) {
-                $prototype = $sections[$section->getName()];
-                $control = $this->controlFactory->createFromPrototype($prototype, $section);
+            if (isset($prototypes[$section->getName()])) {
+                $prototype = $prototypes[$section->getName()];
+
+                if (isset($values[$section->getIdentifier()])) {
+                    $controlValue = $values[$section->getIdentifier()];
+                } else {
+                    $controlValue = null;
+                }
+
+                $controls[] = $this->controlFactory->createFromPrototype($prototype, $section, $controlValue);
             }
         }
-        die;
+
+        return $controls;
+    }
+
+    protected function getContent(TemplateInterface $template)
+    {
+        $this->sectionExtension->setTemplate($template);
+        $content = $this->twig->render($template->getView());
+        $this->sectionExtension->setTemplate(null);
+        return $content;
     }
 
 }

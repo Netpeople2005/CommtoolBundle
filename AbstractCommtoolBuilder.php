@@ -34,15 +34,9 @@ abstract class AbstractCommtoolBuilder implements CommtoolBuilderInterface
     public function getValues()
     {
         $values = array();
-
-        foreach ($this->getControls() as $type => $controls) {
-            foreach ($controls as $index => $control) {
-                if ($control instanceof ControlLoopInterface) {
-                    $values[$type] = $control->getValue();
-                } else {
-                    $values[$type][$index] = $control->getValue();
-                }
-            }
+        foreach ($this->getControls() as $index => $control) {
+            $values[$control->getIdentifier()] = $control->getValue();
+//            $values[$index] = $control->getValue();
         }
 
         return $values;
@@ -50,17 +44,10 @@ abstract class AbstractCommtoolBuilder implements CommtoolBuilderInterface
 
     public function setValues($data)
     {
-        foreach ($this->getControls() as $type => $controls) {
-            foreach ($controls as $index => $control) {
-                if ($control instanceof ControlLoopInterface) {
-                    if (isset($data[$type])) {
-                        $control->setValue($data[$type]);
-                    }
-                } else {
-                    if (isset($data[$type][$index])) {
-                        $control->setValue($data[$type][$index]);
-                    }
-                }
+        foreach ($this->getControls() as $index => $control) {
+            $id = $control->getIdentifier();
+            if (isset($data[$id])) {
+                $control->setValue($data[$id]);
             }
         }
     }

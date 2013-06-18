@@ -4,7 +4,6 @@ namespace Optime\Bundle\CommtoolBundle\Control;
 
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
 use Optime\Bundle\CommtoolBundle\Control\View\ViewInterface;
-use Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface;
 
 abstract class AbstractControl implements ControlInterface
 {
@@ -52,7 +51,18 @@ abstract class AbstractControl implements ControlInterface
 
     public function getValue()
     {
-        return $this->value;
+        if (count($this->children)) {
+            $value = array();
+            foreach ($this->children as $index => $control) {
+                $id = $control->getIdentifier();
+                $value[$id] = $control->getValue();
+//                $value[$index] = $control->getValue();
+            }
+
+            return $value;
+        } else {
+            return $this->value;
+        }
     }
 
     public function getIndex()
@@ -79,11 +89,10 @@ abstract class AbstractControl implements ControlInterface
     {
         $this->value = $value;
         if (is_array($value)) {
-            foreach ($this->children as $type => $controls) {
-                foreach ($controls as $index => $control) {
-                    if (isset($value[$type][$index])) {
-                        $control->setValue($value[$type][$index]);
-                    }
+            foreach ($this->children as $control) {
+                $id = $control->getIdentifier();
+                if (isset($value[$id])) {
+                    $control->setValue($value[$id]);
                 }
             }
         }

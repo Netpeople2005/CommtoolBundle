@@ -3,7 +3,11 @@ parameters:
 services:
     commtool_factory:
         class: Optime\Bundle\CommtoolBundle\CommtoolFactory
-        arguments: ["@commtool_control_factory", "@twig"]
+        arguments:
+            - "@commtool_control_factory"
+            - "@twig"
+            - "@commtool_template_section_twig_extension"
+        
     commtool_control_factory:
         class: Optime\Bundle\CommtoolBundle\ControlFactory
         arguments: 

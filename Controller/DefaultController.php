@@ -15,56 +15,22 @@ class DefaultController extends Controller
         $template = $this->getDoctrine()
                 ->getManager()
                 ->getRepository('CommtoolTemplateBundle:Template')
-                ->find(7);
-
-        $this->get('commtool_factory')->create($commtool, $template);
-
-        $c = $commtool->getControls();
-//        echo "<pre>";
-//        print_r($template->getValues());
+                ->find(1);
 
         $data = array(
-            'singleline' => array('Primer Singleline', 'Segundo Singleline'),
-            'product' => array(
-                array(
-                    'singleline' => array('Primer producto con su primer singleline', 'Primer producto con su segundo singleline'),
-                ),
-                array(
-                    'singleline' => array('Segundo producto con su primer singleline'),
-                    'multiline' => array('Segundo producto con su primer multiline'),
-                ),
-            ),
-            'loop_sin' => array(
-                array(
-                    'singleline' => array('Loop Sin con primer Singleline')
-                ),
-                array(
-                    'singleline' => array('Loop Sin con segundo Singleline')
-                ),
-            ),
-            'loop_pro' => array(
-                array(
-                    'product' => array(
-                        array(
-                            'singleline' => array('Loop Pro con su primer singleline'),
-                        ),
-                    )
-                ),
-                array(
-                    'product' => array(
-                        array(
-                            'singleline' => array('Loop Pro con su segundo singleline'),
-                        ),
-                    )
-                ),
+            's_sing_1' => 'Nuevo Valor Singleline',
+            's_product_1' => array(
+                's_sing_prod_1' => 'Nuevo Singleline dentro de Product'
             ),
         );
 
-        $commtool->setValues($data);
+        $this->get('commtool_factory')->create($commtool, $template, array(
+            //'data' => $data,
+        ));
 
-        echo "<pre>";
-        print_r($commtool->getValues());
-        echo "</pre>";
+//        var_dump($commtool->getValues());
+
+        //$commtool->setValues($data);
 
         return $this->render('OptimeCommtoolBundle:Default:index.html.twig', array(
                     'template' => $commtool,

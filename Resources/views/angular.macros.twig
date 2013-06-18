@@ -1,0 +1,6 @@
+{% macro angular_vars(controls) %}
+{% import _self as this %}
+    {% for var_name, value in controls %}
+        $scope.{{ var_name }} = '{{ value|escape('js') }}';
+    {% endfor %}
+{% endmacro %}

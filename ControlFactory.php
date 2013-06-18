@@ -42,19 +42,56 @@ class ControlFactory extends ContainerAware
      * @param array $options
      * @return ControlInterface
      */
-    public function createFromPrototype(ControlInterface $control, SectionConfigInterface $config)
+    public function createFromPrototype(ControlInterface $control
+    , SectionConfigInterface $config, $value = null)
     {
         $control = clone $control;
-
         $control->setIdentifier($config->getIdentifier());
-        $control->setOptions($config->getConfig());
 
-        $this->manipulator->load($control);
-        
-        if ($control->getChildren() and $config->getChildren()) {
-//            foreach($control->getChildren())
-            var_dump($config->getChildren());die;
+        $options = $control->getOptions();
+
+        if (isset($options['config'])) {
+            $options['config'] = array_merge($options['config'], $config->getConfig());
+        } else {
+            $options['config'] = $config->getConfig();
         }
+
+        if (count($control->getChildren()) and count($config->getChildren())) {
+            $prototypes = $control->getChildren();
+
+            $controls = array();
+
+            foreach ($config->getChildren() as $secConf) {
+                if (isset($prototypes[$secConf->getName()])) {
+                    $prototype = $prototypes[$secConf->getName()];
+
+                    if (is_array($value) and isset($value[$secConf->getIdentifier()])) {
+                        $controlValue = $value[$secConf->getIdentifier()];
+                    } else {
+                        $controlValue = null;
+                    }
+
+                    $controls[] = $this->createFromPrototype($prototype, $secConf, $controlValue);
+                }
+            }
+
+            $control->setChildren($controls);
+        }
+
+
+        if (isset($options['data'])) {
+            if (is_callable($options['data'])) {
+                $value = call_user_func($options['data'], $config, $value);
+                $control->setValue($value);
+            } else {
+                $control->setValue($options['data']);
+            }
+        } else if (null !== $value) {
+            $control->setValue($value);
+        } else {
+            $this->manipulator->load($control);
+        }
+
         return $control;
     }
 
@@ -69,20 +106,7 @@ class ControlFactory extends ContainerAware
 
             $options['has_children'] = true;
 
-//            if ($content) {
-
-//                $this->manipulator->createControls($builder, $control);
-//
-//                $control->setChildren($builder->getControls());
-//
-//                $control->setValue($builder->getValues());
-//            }
-        } else {
-//            if ($content instanceof \phpQueryObject) {
-//                $control->setValue(trim($content->html()));
-//            } else {
-//                $control->setValue(trim((string) $content));
-//            }
+            $control->setChildren($builder->getPrototypes());
         }
 
         $control->setOptions($options);
