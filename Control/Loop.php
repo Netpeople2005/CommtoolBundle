@@ -14,6 +14,7 @@ class Loop extends AbstractControl implements ControlLoopInterface
      * @var ControlInterface
      */
     protected $prototype;
+    protected $type;
 
     public function build(BuilderInterface $builder, array $options = array())
     {
@@ -27,30 +28,38 @@ class Loop extends AbstractControl implements ControlLoopInterface
 
         $type = $options['type'];
 
+        if (is_string($type)) {
+            $this->type = $type;
+        } elseif ($type instanceof ControlInterface) {
+            $this->type = $type->getName();
+        } else {
+            throw new \Exception("No se reconoce el tipo de control para el Loop");
+        }
+
         $builder->add($type);
     }
 
     public function getName()
     {
-        return 'loop_' . $this->getOptions('selector');
+        return 'loop';// . $this->type;
     }
 
-    public function setValue($value)
-    {
-        $this->value = $value;
-
-        if (!is_array($value)) {
-            throw new \Exception("El control de Tipo {$this->getName()} solo acepta como valor un Arreglo");
-        }
-
-//        foreach ($this->children as $type => $controls) {
-//            foreach ($controls as $index => $control) {
-//                if (isset($value[$index][$type])) {
-//                    $control->setValue($value[$index][$type]);
-//                }
-//            }
+//    public function setValue($value)
+//    {
+//        $this->value = $value;
+//
+//        if (!is_array($value)) {
+//            throw new \Exception("El control de Tipo {$this->getName()} solo acepta como valor un Arreglo");
 //        }
-    }
+//
+////        foreach ($this->children as $type => $controls) {
+////            foreach ($controls as $index => $control) {
+////                if (isset($value[$index][$type])) {
+////                    $control->setValue($value[$index][$type]);
+////                }
+////            }
+////        }
+//    }
 
     public function setChildren(array $children)
     {

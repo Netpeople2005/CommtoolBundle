@@ -57,6 +57,10 @@ class ControlFactory extends ContainerAware
             $options['config'] = $config->getConfig();
         }
 
+        if (!isset($options['label'])) {
+            $options['label'] = $config->getLabel();
+        }
+
         if (count($control->getChildren()) and count($config->getChildren())) {
             $prototypes = $control->getChildren();
 

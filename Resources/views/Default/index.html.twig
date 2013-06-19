@@ -3,10 +3,13 @@
 {% set controls = template.controls %}
 
 {% block body %}
-<div ng-app ng-controller="MainCtrl">
-{{ template.content|raw }}
-<hr/>
-{{ commtool_controls(template) }}
+<div ng-app ng-controller="MainCtrl" style="width: 1000px">
+    <div class="commtool-content">
+        {{ template.content|raw }}
+    </div>
+    <div class="commtool-lateral">
+        {{ commtool_controls(template) }}
+    </div>
 </div>
 {% endblock %}
 
@@ -32,4 +35,9 @@
         $scope.aaa = "{{ asset("bundles/commtooltemplate/images/img_01a.jpg") }}"
     }
 </script>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link type="text/css" rel="stylesheet" href="{{ asset('bundles/optimecommtool/css/commtool.css') }}" />
 {% endblock %}

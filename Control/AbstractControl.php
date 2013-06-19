@@ -55,8 +55,8 @@ abstract class AbstractControl implements ControlInterface
             $value = array();
             foreach ($this->children as $index => $control) {
                 $id = $control->getIdentifier();
-                $value[$id] = $control->getValue();
 //                $value[$index] = $control->getValue();
+                $value[$id] = $control->getValue();
             }
 
             return $value;
@@ -89,7 +89,7 @@ abstract class AbstractControl implements ControlInterface
     {
         $this->value = $value;
         if (is_array($value)) {
-            foreach ($this->children as $control) {
+            foreach ($this->children as $index => $control) {
                 $id = $control->getIdentifier();
                 if (isset($value[$id])) {
                     $control->setValue($value[$id]);

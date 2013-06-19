@@ -7,6 +7,10 @@ services:
         class: Optime\Bundle\CommtoolBundle\Control\Multiline
         tags:
             - {name: commtool.control.type, alias: multiline}
+    commtool.control.image:
+        class: Optime\Bundle\CommtoolBundle\Control\Image
+        tags:
+            - {name: commtool.control.type, alias: image}
     commtool.control.loop:
         class: Optime\Bundle\CommtoolBundle\Control\Loop
         tags:

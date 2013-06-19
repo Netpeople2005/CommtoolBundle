@@ -10,9 +10,7 @@ use Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface;
 class Builder implements BuilderInterface
 {
 
-    protected $controls = array();
     protected $prototypes = array();
-    protected $sections = array();
 
     /**
      *
@@ -44,18 +42,11 @@ class Builder implements BuilderInterface
 
         $this->prototypes[$prototype->getName()] = $prototype;
 
-        $this->sections[$prototype->getName()] = $prototype->getSelector();
-
         if ($this->parent) {
             $prototype->setParent($this->parent);
         }
 
         return $this;
-    }
-
-    public function getControls()
-    {
-        return $this->controls;
     }
 
     /**
@@ -67,36 +58,9 @@ class Builder implements BuilderInterface
         return $this->parent;
     }
 
-    public function setControls(array $sections)
-    {
-        $this->controls = $sections;
-    }
-
-    public function getSections()
-    {
-        return $this->sections;
-    }
-
     public function getPrototypes()
     {
         return $this->prototypes;
-    }
-
-    public function getValues()
-    {
-        $values = array();
-
-        foreach ($this->getControls() as $type => $controls) {
-            foreach ($controls as $index => $control) {
-                if ($this->parent instanceof ControlLoopInterface) {
-                    $values[0][$type][$index] = $control->getValue();
-                } else {
-                    $values[$type][$index] = $control->getValue();
-                }
-            }
-        }
-
-        return $values;
     }
 
 }

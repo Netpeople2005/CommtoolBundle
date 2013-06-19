@@ -1,25 +1,25 @@
 {% block control_singleline %}
-    <label>{{ label }}</label>
+<div class="commtool-control">
     {% if options['config'].is_interactive %}
+        {% if label %}<label>{{ label }}</label>{% endif %}
         <input type="text" ng-model="{{ id }}" />
     {% endif %}
+</div>
 {% endblock %}
 
 {% block control_multiline %}
-    <label>{{ label }}</label>
+<div class="commtool-control">
     {% if options['config'].is_interactive %}
+        {% if label is not empty %}<label>{{ label }}</label>{% endif %}
         <textarea type="text" ng-model="{{ id }}"></textarea>
     {% endif %}
+</div>
 {% endblock %}
 
 {% block control_product %}
-    <label>{{ label }}</label>
+<div class="commtool-control">
+    {% if label is not empty %}<label>{{ label }}</label>{% endif %}
     {{ commtool_singleline(children[0]) }}
-{% endblock %}
-
-{% block controls %}
-    <label>{{ label }}</label>
-    {% if options['config'].is_interactive %}
-        <textarea type="text" ng-model="{{ id }}"></textarea>
-    {% endif %}
+    {{ commtool_multiline(children[1]) }}
+</div>
 {% endblock %}

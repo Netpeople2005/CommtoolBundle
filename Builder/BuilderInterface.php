@@ -15,17 +15,10 @@ interface BuilderInterface
      */
     public function add($sectionName, array $options = array());
 
-    public function setControls(array $sections);
-
-    public function getControls();
-
-    public function getSections();
-
     /**
      * @return ControlInterface
      */
     public function getControl();
-    
+
     public function getPrototypes();
-    public function getValues();
 }

@@ -91,7 +91,6 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
     public function load(ControlInterface $control)
     {
         $part = $this->phpQueryCont["[data-id={$control->getIdentifier()}]"];
-
         if ($part->is('img')) {
             $control->setValue($part->attr('src'));
         } else {

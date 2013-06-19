@@ -1,0 +1,6 @@
+.commtool-content,.commtool-lateral{margin-right: 5px}
+.commtool-content{overflow: scroll;width: 700px;float: left}
+.commtool-lateral{padding: 0px;width: 230px;float: right;margin-bottom: 10px}
+.commtool-lateral label{display: block;text-transform: capitalize}
+.commtool-lateral input{width: 96%}
+.commtool-control{margin: 5px 0px}

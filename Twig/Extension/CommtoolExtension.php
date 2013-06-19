@@ -64,7 +64,7 @@ class CommtoolExtension extends \Twig_Extension
     {
         return $this->getTemplate()->renderBlock("control_{$type}", array(
                     'id' => $control->getIndex(),
-                    'label' => $control->getName(),
+                    'label' => $control->getOptions('label'),
                     'options' => $control->getOptions(),
                     'children' => $control->getChildren(),
         ));

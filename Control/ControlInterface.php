@@ -57,6 +57,4 @@ interface ControlInterface
     public function getOptions($name = null);
 
     public function setOptions(array $options);
-
-    public function createView(ViewInterface $parent = null);
 }
