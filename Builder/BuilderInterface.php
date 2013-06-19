@@ -3,6 +3,7 @@
 namespace Optime\Bundle\CommtoolBundle\Builder;
 
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
+use Optime\Bundle\CommtoolBundle\ControlFactory;
 
 interface BuilderInterface
 {
@@ -21,4 +22,9 @@ interface BuilderInterface
     public function getControl();
 
     public function getPrototypes();
+
+    /**
+     * @return ControlFactory
+     */
+    public function getFactory();
 }

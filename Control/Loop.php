@@ -5,6 +5,7 @@ namespace Optime\Bundle\CommtoolBundle\Control;
 use Optime\Bundle\CommtoolBundle\Control\AbstractControl;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 use Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface;
+use Optime\Commtool\TemplateBundle\Model\SectionConfigInterface;
 
 class Loop extends AbstractControl implements ControlLoopInterface
 {
@@ -15,6 +16,12 @@ class Loop extends AbstractControl implements ControlLoopInterface
      */
     protected $prototype;
     protected $type;
+
+    /**
+     *
+     * @var \Optime\Bundle\CommtoolBundle\ControlFactory
+     */
+    protected $factory;
 
     public function build(BuilderInterface $builder, array $options = array())
     {
@@ -37,47 +44,59 @@ class Loop extends AbstractControl implements ControlLoopInterface
         }
 
         $builder->add($type);
+
+//        $this->factory = $builder->getFactory();
     }
 
     public function getName()
     {
-        return 'loop';// . $this->type;
+        return 'loop'; // . $this->type;
     }
-
-//    public function setValue($value)
-//    {
-//        $this->value = $value;
-//
-//        if (!is_array($value)) {
-//            throw new \Exception("El control de Tipo {$this->getName()} solo acepta como valor un Arreglo");
-//        }
-//
-////        foreach ($this->children as $type => $controls) {
-////            foreach ($controls as $index => $control) {
-////                if (isset($value[$index][$type])) {
-////                    $control->setValue($value[$index][$type]);
-////                }
-////            }
-////        }
-//    }
 
     public function setChildren(array $children)
     {
+        $children = array_values($children);
         parent::setChildren($children);
-
-        if (!$this->prototype && count($children) && count(current($children))) {
-            $this->prototype = count(current($children));
+        var_dump($children);
+        if (!$this->prototype && count($children)) {
+            $this->prototype = current($children);
         }
-    }
-
-    public function getSelector($useParent = true)
-    {
-        return parent::getSelector($useParent);
     }
 
     public function getPrototype()
     {
         return $this->prototype;
+    }
+
+    public function getValue()
+    {
+            var_dump($this->children);die;
+        if (count($this->children)) {
+            $value = array();
+            foreach ($this->children as $index => $control) {
+                $id = $control->getIdentifier();
+//                $value[$index] = $control->getValue();
+                $value[$id] = $control->getValue();
+            }
+
+            return $value;
+        } else {
+            return $this->value;
+        }
+    }
+
+    public function setValue($value)
+    {
+        $this->value = $value;
+        if (is_array($value)) {
+            $this->setChildren(array());
+            var_dump($this->prototype);die;
+            foreach ($value as $val) {
+                $prototype = clone $this->prototype;
+                $prototype->setValue($val);
+                $this->children[] = $prototype;
+            }
+        }
     }
 
 }

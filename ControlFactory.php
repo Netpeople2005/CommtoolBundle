@@ -43,7 +43,7 @@ class ControlFactory extends ContainerAware
      * @return ControlInterface
      */
     public function createFromPrototype(ControlInterface $control
-    , SectionConfigInterface $config, $value = null)
+    , SectionConfigInterface $config)
     {
         $control = clone $control;
         $control->setIdentifier($config->getIdentifier());
@@ -62,21 +62,22 @@ class ControlFactory extends ContainerAware
         }
 
         if (count($control->getChildren()) and count($config->getChildren())) {
-            $prototypes = $control->getChildren();
 
             $controls = array();
+            if ($control instanceof Control\ControlLoopInterface) {
+                $prototypes = array(
+                    $control->getPrototype()->getName() => $control->getPrototype()
+                );
+            } else {
+                $prototypes = $control->getChildren();
+            }
 
             foreach ($config->getChildren() as $secConf) {
                 if (isset($prototypes[$secConf->getName()])) {
+
                     $prototype = $prototypes[$secConf->getName()];
 
-                    if (is_array($value) and isset($value[$secConf->getIdentifier()])) {
-                        $controlValue = $value[$secConf->getIdentifier()];
-                    } else {
-                        $controlValue = null;
-                    }
-
-                    $controls[] = $this->createFromPrototype($prototype, $secConf, $controlValue);
+                    $controls[] = $this->createFromPrototype($prototype, $secConf);
                 }
             }
 
@@ -95,8 +96,6 @@ class ControlFactory extends ContainerAware
             } else {
                 $control->setValue($options['data']);
             }
-        } else if (null !== $value) {
-            $control->setValue($value);
         }
 
         $control->setOptions($options);

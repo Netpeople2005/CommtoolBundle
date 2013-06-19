@@ -91,7 +91,7 @@ abstract class AbstractControl implements ControlInterface
         if (is_array($value)) {
             foreach ($this->children as $index => $control) {
                 $id = $control->getIdentifier();
-                if (isset($value[$id])) {
+                if (!$control->isReadOnly() and isset($value[$id])) {
                     $control->setValue($value[$id]);
                 }
             }
@@ -153,6 +153,11 @@ abstract class AbstractControl implements ControlInterface
         }
 
         return $view;
+    }
+
+    public function isReadOnly()
+    {
+        return isset($this->options['readonly']) ? $this->options['readonly'] : false;
     }
 
 }

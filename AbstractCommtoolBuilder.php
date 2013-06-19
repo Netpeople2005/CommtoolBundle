@@ -45,7 +45,7 @@ abstract class AbstractCommtoolBuilder implements CommtoolBuilderInterface
     {
         foreach ($this->getControls() as $index => $control) {
             $id = $control->getIdentifier();
-            if (isset($data[$id])) {
+            if (!$control->isReadOnly() and isset($data[$id])) {
                 $control->setValue($data[$id]);
             }
         }

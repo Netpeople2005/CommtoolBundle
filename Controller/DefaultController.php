@@ -18,20 +18,21 @@ class DefaultController extends Controller
                 ->find(1);
 
         $data = array(
-            's_sing_1' => 'Nuevo Valor Singleline',
-            's_product_1' => array(
-                's_sing_prod_1' => 'Nuevo Singleline dentro de Product'
+            's_sponsor_loop' => array(
+                0 => '/commtool/web/bundles/commtooltemplate/images/template_45.jpg',
+                0 => '/commtool/web/bundles/commtooltemplate/images/template_45.jpg',
             ),
+            's_image_1' => 'MI IMaGEN',
         );
 
         $this->get('commtool_factory')->create($commtool, $template, array(
-                //'data' => $data,
+                'data' => $data,
         ));
 
         $c = $commtool->getControls();
-//        var_dump($c);
+        var_dump($c);die;
 //        var_dump($c[1]);
-//        var_$sectiondump($commtool->getValues());
+        var_dump($commtool->getValues());
 //        die;
         //$commtool->setValues($data);
 

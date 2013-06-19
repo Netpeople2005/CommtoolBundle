@@ -3,7 +3,6 @@
 namespace Optime\Bundle\CommtoolBundle\Control;
 
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
-use Optime\Bundle\CommtoolBundle\Control\View\ViewInterface;
 
 /**
  * Define una sección del Elemento Editable.
@@ -57,4 +56,6 @@ interface ControlInterface
     public function getOptions($name = null);
 
     public function setOptions(array $options);
+
+    public function isReadOnly();
 }

@@ -53,16 +53,18 @@ class CommtoolFactory
         $commtoolBuilder->build($builder, $options);
 
         if (isset($options['data'])) {
-            $value = $options['data'];
+            $values = $options['data'];
         } else {
-            $value = array();
+            $values = array();
         }
 
-        $controls = $this->createControls($builder->getPrototypes(), $template->getSections(), $value);
+        $controls = $this->createControls($builder->getPrototypes(), $template->getSections());
 
         $commtoolBuilder->setContent($manipulator->getContent());
 
         $commtoolBuilder->setControls($controls);
+
+        $commtoolBuilder->setValues($values);
     }
 
     /**
@@ -85,7 +87,7 @@ class CommtoolFactory
         return $view;
     }
 
-    public function createControls(array $prototypes, $templateSections, array $values = array())
+    public function createControls(array $prototypes, $templateSections)
     {
         $controls = array();
         //filtramos solo las secciones que no posean padres en primera instancia.
@@ -95,15 +97,10 @@ class CommtoolFactory
 
         foreach ($templateSections as $section) {
             if (isset($prototypes[$section->getName()])) {
+                
                 $prototype = $prototypes[$section->getName()];
 
-                if (isset($values[$section->getIdentifier()])) {
-                    $controlValue = $values[$section->getIdentifier()];
-                } else {
-                    $controlValue = null;
-                }
-
-                $controls[] = $this->controlFactory->createFromPrototype($prototype, $section, $controlValue);
+                $controls[] = $this->controlFactory->createFromPrototype($prototype, $section);
             }
         }
 
