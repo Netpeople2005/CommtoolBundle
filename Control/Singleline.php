@@ -13,7 +13,7 @@ class Singleline extends AbstractControl
         
     }
 
-    public function getName()
+    public function getType()
     {
         return 'singleline';
     }

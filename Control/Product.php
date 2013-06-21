@@ -14,7 +14,7 @@ class Product extends AbstractControl
                 ->add('multiline');
     }
 
-    public function getName()
+    public function getType()
     {
         return 'product';
     }

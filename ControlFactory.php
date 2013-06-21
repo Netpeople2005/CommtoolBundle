@@ -25,7 +25,7 @@ class ControlFactory extends ContainerAware
 
     public function create(SectionConfigInterface $config, array $options = array())
     {
-        $control = $this->resolveControl($config->getName());
+        $control = $this->resolveControl($config->getType());
 
         $builder = new Builder($this, $control);
 
@@ -45,7 +45,6 @@ class ControlFactory extends ContainerAware
         }
 
         $control->setOptions($options);
-
         if ($builder->hasControls() and count($config->getChildren())) {
             $controls = $builder->createControls($config->getChildren());
             $control->setChildren($controls);
@@ -70,30 +69,30 @@ class ControlFactory extends ContainerAware
      * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface|string $name
      * @return \Optime\Bundle\CommtoolBundle\Control\ControlInterface
      */
-    public function resolveControl($name)
+    public function resolveControl($type)
     {
-        $name = $this->validateControlOrName($name);
+        $type = $this->validateControlOrType($type);
 
-        return clone $this->container->get($this->validTypes[$name]);
+        return clone $this->container->get($this->validTypes[$type]);
     }
 
-    public function validateControlOrName($controlOrName)
+    public function validateControlOrType($controlOrType)
     {
-        if (is_object($controlOrName) && $controlOrName instanceof ControlInterface) {
-            $name = $controlOrName->getName();
+        if ($controlOrType instanceof ControlInterface) {
+            $type = $controlOrType->getType();
         } else {
-            $name = $controlOrName;
+            $type = $controlOrType;
         }
 
-        if (!is_string($name)) {
-            throw new \Exception("No se reconoce el valor " . (string) $name);
+        if (!is_string($type)) {
+            throw new \Exception("No se reconoce el valor " . (string) $type);
         }
 
-        if (!isset($this->validTypes[$name])) {
-            throw new \Exception("El control de tipo $name no se reconoce como un control registrado");
+        if (!isset($this->validTypes[$type])) {
+            throw new \Exception("El control de tipo $type no se reconoce como un control registrado");
         }
 
-        return $name;
+        return $type;
     }
 
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null)

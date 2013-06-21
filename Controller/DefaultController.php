@@ -15,7 +15,7 @@ class DefaultController extends Controller
         $template = $this->getDoctrine()
                 ->getManager()
                 ->getRepository('CommtoolTemplateBundle:Template')
-                ->find(8);
+                ->find(4);
 
         $data = array(
             's_sponsor_loop' => array(
@@ -30,8 +30,8 @@ class DefaultController extends Controller
 
         $c = $commtool->getControls();
 //        var_dump($c);
-//        var_dump($c[1]);
-        var_dump($commtool->getValues());
+////        var_dump($c[1]);
+//        var_dump($commtool->getValues());
 //        $commtool->setValues($data);
 //        var_dump($commtool->getValues());
 //        die;

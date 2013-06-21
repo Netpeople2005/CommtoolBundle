@@ -1,9 +1,13 @@
 <span {{ section_singleline(1) }}>Hola Mundo 0</span>
+
 <div {{ section_product(2) }}>
     <span {{ section_singleline('2_1') }}>Hola Mundo, product 0</span>    
     <span {{ section_singleline('2_2') }}>Hola Mundo, product 0</span>    
 </div>
-<div {{ section_loop('l_1', {type:'singleline'}) }}><span {{ section_singleline('l_1_1') }}>test</span></div>
+
+<div {{ section_loop('l_1', {type:'singleline'}) }}>
+    <span {{ section_singleline('l_1_1') }}>test</span>
+</div>
 
 <div {{ section_loop('l_2', {type:'product'}) }}>
     <div {{ section_product(3) }}>

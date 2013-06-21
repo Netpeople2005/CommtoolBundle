@@ -159,5 +159,10 @@ abstract class AbstractControl implements ControlInterface
     {
         return isset($this->options['readonly']) ? $this->options['readonly'] : false;
     }
+    
+    public function getName()
+    {
+        $this->getType();
+    }
 
 }

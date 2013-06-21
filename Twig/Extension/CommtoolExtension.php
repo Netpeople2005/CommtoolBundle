@@ -48,12 +48,11 @@ class CommtoolExtension extends \Twig_Extension
         }
 
         $content = '';
-
         foreach ($commtoolOrControls as $control) {
 //            if ($control->getChildren()) {
 //                $content .= $this->controls($control->getChildren());
 //            } else {
-                $content .= $this->control($control->getName(), $control);
+                $content .= $this->control($control->getType(), $control);
 //            }
         }
 

@@ -13,7 +13,7 @@ class Multiline extends AbstractControl
         
     }
 
-    public function getName()
+    public function getType()
     {
         return 'multiline';
     }

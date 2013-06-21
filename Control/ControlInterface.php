@@ -16,6 +16,8 @@ interface ControlInterface
      */
     public function getName();
 
+    public function getType();
+
     /**
      * Crea como tal el control y sus subcontroles.
      * @param type $builder

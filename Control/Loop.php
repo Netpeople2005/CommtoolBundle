@@ -29,26 +29,14 @@ class Loop extends AbstractControl implements ControlLoopInterface
             throw new \Exception("Se debe especificar el atributo type en las opciones de la sección de tipo loop");
         }
 
-        if (!isset($options['selector'])) {
-            throw new \Exception("Se debe especificar el atributo selector en las opciones de la sección de tipo loop");
-        }
+        $this->type = $builder->getFactory()->validateControlOrType($options['type']);
 
-        $type = $options['type'];
-
-        if (is_string($type)) {
-            $this->type = $type;
-        } elseif ($type instanceof ControlInterface) {
-            $this->type = $type->getName();
-        } else {
-            throw new \Exception("No se reconoce el tipo de control para el Loop");
-        }
-
-        $builder->add($type);
+        $builder->add($this->type);
     }
 
-    public function getName()
+    public function getType()
     {
-        return 'loop'; // . $this->type;
+        return 'loop_' . $this->type;
     }
 
     public function setChildren(array $children)

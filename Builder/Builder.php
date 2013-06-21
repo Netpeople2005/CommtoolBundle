@@ -9,6 +9,7 @@ use Optime\Commtool\TemplateBundle\Model\SectionConfigInterface;
 
 class Builder implements BuilderInterface
 {
+
     protected $controls = array();
 
     /**
@@ -31,9 +32,17 @@ class Builder implements BuilderInterface
 
     public function add($section, array $options = array())
     {
-        $sectionName = $this->factory->validateControlOrName($section);
+        $sectionType = $this->factory->validateControlOrType($section);
 
-        $this->controls[$sectionName] = $options;
+        if ('loop' === $sectionType) {
+            if (!isset($options['type'])) {
+                throw new \Exception("Se debe especificar el atributo type en las opciones de la sección de tipo loop");
+            }
+            $type = $this->factory->validateControlOrType($options['type']);
+            $this->controls[$sectionType . '_' . $type] = $options;
+        } else {
+            $this->controls[$sectionType] = $options;
+        }
 
         return $this;
     }
@@ -55,12 +64,12 @@ class Builder implements BuilderInterface
     public function createControls($templateSections)
     {
         $controls = array();
-        $names = array_keys($this->controls);
+        $types = array_keys($this->controls);
         $parent = $this->parent;
         //filtramos solo las secciones que no posean padres en primera instancia.
         $templateSections = array_filter($templateSections->toArray(), function(SectionConfigInterface $sec)
-                use ($names, $parent) {
-                    if (in_array($sec->getName(), $names)) {
+                use ($types, $parent) {
+                    if (in_array($sec->getName(), $types)) {
                         if ($secParent = $sec->getParent()) {
                             return $parent and $parent->getIdentifier() === $secParent->getIdentifier();
                         } else {
@@ -70,8 +79,7 @@ class Builder implements BuilderInterface
                     return false;
                 });
         foreach ($templateSections as $section) {
-            $controls[] = $this->factory
-                    ->create($section, $this->controls[$section->getName()]);
+            $controls[] = $this->factory->create($section, $this->controls[$section->getName()]);
         }
         return $controls;
     }

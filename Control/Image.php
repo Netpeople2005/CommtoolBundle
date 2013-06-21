@@ -13,7 +13,7 @@ class Image extends AbstractControl
         
     }
 
-    public function getName()
+    public function getType()
     {
         return 'image';
     }
