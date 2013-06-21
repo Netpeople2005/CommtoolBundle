@@ -21,10 +21,12 @@ interface BuilderInterface
      */
     public function getControl();
 
-    public function getPrototypes();
-
     /**
      * @return ControlFactory
      */
     public function getFactory();
+
+    public function createControls($templateSections);
+
+    public function hasControls();
 }

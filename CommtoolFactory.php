@@ -58,53 +58,14 @@ class CommtoolFactory
             $values = array();
         }
 
-        $controls = $this->createControls($builder->getPrototypes(), $template->getSections());
+        if ($builder->hasControls() and count($template->getSections())) {
+            $controls = $builder->createControls($template->getSections());
+        }
 
         $commtoolBuilder->setContent($manipulator->getContent());
-
         $commtoolBuilder->setControls($controls);
 
         $commtoolBuilder->setValues($values);
-    }
-
-    /**
-     * 
-     * @param \Optime\Bundle\CommtoolBundle\CommtoolBuilderInterface $template
-     * @return \Optime\Bundle\CommtoolBundle\TemplateView
-     */
-    public function createView(CommtoolBuilderInterface $template)
-    {
-        $controls = array();
-
-        foreach ($template->getControls() as $index => $control) {
-            $controls[$index] = $control->createView();
-        }
-
-        $this->controlFactory->getManipulator()->prepareContentView($template, $controls);
-
-        $view = new TemplateView($template->getContent(), $controls);
-
-        return $view;
-    }
-
-    public function createControls(array $prototypes, $templateSections)
-    {
-        $controls = array();
-        //filtramos solo las secciones que no posean padres en primera instancia.
-        $templateSections = array_filter($templateSections->toArray(), function(SectionConfigInterface $sec) {
-                    return null === $sec->getParent();
-                });
-
-        foreach ($templateSections as $section) {
-            if (isset($prototypes[$section->getName()])) {
-                
-                $prototype = $prototypes[$section->getName()];
-
-                $controls[] = $this->controlFactory->createFromPrototype($prototype, $section);
-            }
-        }
-
-        return $controls;
     }
 
     protected function getContent(TemplateInterface $template)

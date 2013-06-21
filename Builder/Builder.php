@@ -5,11 +5,11 @@ namespace Optime\Bundle\CommtoolBundle\Builder;
 use Optime\Bundle\CommtoolBundle\ControlFactory;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
+use Optime\Commtool\TemplateBundle\Model\SectionConfigInterface;
 
 class Builder implements BuilderInterface
 {
-
-    protected $prototypes = array();
+    protected $controls = array();
 
     /**
      *
@@ -29,21 +29,11 @@ class Builder implements BuilderInterface
         $this->parent = $parent;
     }
 
-    public function add($sectionName, array $options = array())
+    public function add($section, array $options = array())
     {
-        $prototype = $this->factory->create($sectionName, $options);
+        $sectionName = $this->factory->validateControlOrName($section);
 
-        if (isset($this->prototypes[$prototype->getSelector()])) {
-            throw new \Exception("No se puede agregar más de una sección que use el mismo selector");
-        }
-
-        $prototype->setOptions($options);
-
-        $this->prototypes[$prototype->getName()] = $prototype;
-
-        if ($this->parent) {
-            $prototype->setParent($this->parent);
-        }
+        $this->controls[$sectionName] = $options;
 
         return $this;
     }
@@ -57,34 +47,38 @@ class Builder implements BuilderInterface
         return $this->parent;
     }
 
-    public function getPrototypes()
-    {
-        return $this->prototypes;
-    }
-
     public function getFactory()
     {
         return $this->factory;
     }
-    
-    public function createControls(array $prototypes, $templateSections)
+
+    public function createControls($templateSections)
     {
         $controls = array();
+        $names = array_keys($this->controls);
+        $parent = $this->parent;
         //filtramos solo las secciones que no posean padres en primera instancia.
-        $templateSections = array_filter($templateSections->toArray(), function(SectionConfigInterface $sec) {
-                    return null === $sec->getParent();
+        $templateSections = array_filter($templateSections->toArray(), function(SectionConfigInterface $sec)
+                use ($names, $parent) {
+                    if (in_array($sec->getName(), $names)) {
+                        if ($secParent = $sec->getParent()) {
+                            return $parent and $parent->getIdentifier() === $secParent->getIdentifier();
+                        } else {
+                            return $parent === null;
+                        }
+                    }
+                    return false;
                 });
-
         foreach ($templateSections as $section) {
-            if (isset($prototypes[$section->getName()])) {
-                
-                $prototype = $prototypes[$section->getName()];
-
-                $controls[] = $this->controlFactory->createFromPrototype($prototype, $section);
-            }
+            $controls[] = $this->factory
+                    ->create($section, $this->controls[$section->getName()]);
         }
-
         return $controls;
+    }
+
+    public function hasControls()
+    {
+        return count($this->controls) > 0;
     }
 
 }

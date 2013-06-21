@@ -3,6 +3,7 @@
 {% set controls = template.controls %}
 
 {% block body %}
+{% block content %}
 <div ng-app ng-controller="MainCtrl" style="width: 1000px">
     <div class="commtool-content">
         {{ template.content|raw }}
@@ -11,6 +12,7 @@
         {{ commtool_controls(template) }}
     </div>
 </div>
+{% endblock %}
 {% endblock %}
 
 {% block javascripts %}

@@ -23,33 +23,16 @@ class ControlFactory extends ContainerAware
         $this->validTypes = $validTypes;
     }
 
-    /**
-     * 
-     * @param type $name
-     * @param type $content
-     * @param array $options
-     * @return ControlInterface
-     */
-    public function create($name, array $options = array())
+    public function create(SectionConfigInterface $config, array $options = array())
     {
-        return $this->_create($this->resolveControl($name), $options);
-    }
+        $control = $this->resolveControl($config->getName());
 
-    /**
-     * 
-     * @param type $name
-     * @param type $content
-     * @param array $options
-     * @return ControlInterface
-     */
-    public function createFromPrototype(ControlInterface $control
-    , SectionConfigInterface $config)
-    {
-        $control = clone $control;
+        $builder = new Builder($this, $control);
+
         $control->setIdentifier($config->getIdentifier());
         $control->setIndex($config->getCompleteIdentifier());
 
-        $options = $control->getOptions();
+        $control->build($builder, $options);
 
         if (isset($options['config']) and is_array($options['config'])) {
             $options['config'] = array_merge($options['config'], $config->getConfig());
@@ -61,26 +44,10 @@ class ControlFactory extends ContainerAware
             $options['label'] = $config->getLabel();
         }
 
-        if (count($control->getChildren()) and count($config->getChildren())) {
+        $control->setOptions($options);
 
-            $controls = array();
-            if ($control instanceof Control\ControlLoopInterface) {
-                $prototypes = array(
-                    $control->getPrototype()->getName() => $control->getPrototype()
-                );
-            } else {
-                $prototypes = $control->getChildren();
-            }
-
-            foreach ($config->getChildren() as $secConf) {
-                if (isset($prototypes[$secConf->getName()])) {
-
-                    $prototype = $prototypes[$secConf->getName()];
-
-                    $controls[] = $this->createFromPrototype($prototype, $secConf);
-                }
-            }
-
+        if ($builder->hasControls() and count($config->getChildren())) {
+            $controls = $builder->createControls($config->getChildren());
             $control->setChildren($controls);
         }
 
@@ -88,36 +55,12 @@ class ControlFactory extends ContainerAware
 
         if (isset($options['data'])) {
             if (is_callable($options['data'])) {
-                if (null === $value) {
-                    $value = $control->getValue();
-                }
-                $value = call_user_func($options['data'], $config, $value);
+                $value = call_user_func($options['data'], $config, $control->getValue());
                 $control->setValue($value);
             } else {
                 $control->setValue($options['data']);
             }
         }
-
-        $control->setOptions($options);
-
-        return $control;
-    }
-
-    protected function _create($control, array $options = array())
-    {
-
-        $builder = new Builder($this, $control);
-
-        $control->build($builder, $options);
-
-        if (count($builder->getPrototypes())) {
-
-            $options['has_children'] = true;
-
-            $control->setChildren($builder->getPrototypes());
-        }
-
-        $control->setOptions($options);
 
         return $control;
     }
@@ -129,30 +72,28 @@ class ControlFactory extends ContainerAware
      */
     public function resolveControl($name)
     {
-        if (is_object($name) && $name instanceof ControlInterface) {
-            if (isset($this->validTypes[$name->getName()])) {
-                $name = $name->getName();
-            } else {
-                return $name;
-            }
+        $name = $this->validateControlOrName($name);
+
+        return clone $this->container->get($this->validTypes[$name]);
+    }
+
+    public function validateControlOrName($controlOrName)
+    {
+        if (is_object($controlOrName) && $controlOrName instanceof ControlInterface) {
+            $name = $controlOrName->getName();
+        } else {
+            $name = $controlOrName;
         }
 
         if (!is_string($name)) {
             throw new \Exception("No se reconoce el valor " . (string) $name);
         }
 
-        if (isset($this->validTypes[$name])) {
-            return clone $this->container->get($this->validTypes[$name]);
+        if (!isset($this->validTypes[$name])) {
+            throw new \Exception("El control de tipo $name no se reconoce como un control registrado");
         }
 
-        throw new \Exception("El tipo de sección $name no existe");
-    }
-
-    public function getSelector($name)
-    {
-        if (isset($this->validTypes[$name])) {
-            return $this->container->get($this->validTypes[$name])->getSelector();
-        }
+        return $name;
     }
 
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null)
