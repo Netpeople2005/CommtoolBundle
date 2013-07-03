@@ -15,7 +15,7 @@ class ControlView implements ViewInterface
         $this->vars = $control->getOptions();
 
         $this->vars['type'] = $control->getName();
-        $this->vars['selector'] = $control->getSelector();
+        $this->vars['selector'] = $control->getCompleteType();
         $this->vars['parent'] = $parent;
         $this->vars['children'] = array();
 

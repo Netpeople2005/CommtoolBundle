@@ -16,6 +16,8 @@ interface BuilderInterface
      */
     public function add($sectionName, array $options = array());
 
+    public function addNamed($name, $sectionName, array $options = array());
+
     /**
      * @return ControlInterface
      */

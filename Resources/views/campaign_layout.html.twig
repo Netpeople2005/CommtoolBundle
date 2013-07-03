@@ -1,0 +1,43 @@
+{% extends "OptimeCommtoolBundle::commtool_layout.html.twig" %}
+
+{% block control_title_singleline %}
+<div class="commtool-control commtool-control-{{ type }}">
+    {% if options['config'].is_interactive %}
+        {% if label %}<label>{{ label }}</label>{% endif %}
+        <input type="text" ng-model="{{ id }}.value"/>
+        <input type="button" {{ control_binds() }} />
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block control_ppal_image %}
+{% block control_logo_ppal_image %}
+<div class="commtool-control commtool-control-{{ type }}">
+    {% if label %}<label>{{ label }}</label>{% endif %}
+    <img ng-src="{{ '{{'~ id ~'.value}}' }}" width="100px" />
+    <input type="button" {{ control_binds() }} />
+</div>
+{% endblock %}
+{% endblock %}
+
+{% block control_singleline_loop %}
+<div class="commtool-control commtool-control-loop commtool-control-{{ type }}" 
+    ng-init="products = {{ id }}">
+    <span ng-repeat="{{ id }} in {{ id }}">
+        <table>
+            <tr>
+                <td>
+    {{ commtool_controls(children) }}
+                </td>
+                <td>
+                    <input type="button" value="subir" ng-click="subir({{id}}, products)" ng-show="!$first"/>
+                </td>
+            </tr>
+        </table>
+    </span>
+</div>
+{% endblock %}
+
+{% block control_singleline_loop_singleline %}
+    <input type="text" ng-model="{{ id }}.value" {{ control_binds() }} />
+{% endblock %}

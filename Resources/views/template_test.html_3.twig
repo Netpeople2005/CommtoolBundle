@@ -1,16 +1,17 @@
-<span {{ section_singleline(1) }}>Hola Mundo 0</span>
+<span {{ section_singleline() }}>Hola Mundo 0</span>
+<div {{ section_singleline('title') }}>Titulo del Template</div>
 
-<div {{ section_product(2) }}>
-    <span {{ section_singleline('2_1') }}>Hola Mundo, product 0</span>    
-    <span {{ section_singleline('2_2') }}>Hola Mundo, product 0</span>    
+<div {{ section_product() }}>
+    <span {{ section_singleline() }}>Hola Mundo, product 0</span>    
+    <span {{ section_multiline() }}>Hola Mundo, product 0</span>    
 </div>
 
-<div {{ section_loop('l_1', {type:'singleline'}) }}>
-    <span {{ section_singleline('l_1_1') }}>test</span>
+<div {{ section_loop('singleline') }}>
+    <span {{ section_singleline() }}>test</span>
 </div>
 
-<div {{ section_loop('l_2', {type:'product'}) }}>
-    <div {{ section_product(3) }}>
-        <p {{ section_singleline('l_2_3_1') }}>JEJEJE</p>
+<div {{ section_loop('product') }}>
+    <div {{ section_product() }}>
+        <div {{ section_singleline() }}>JEJEJE</div>
     </div>
 </div>

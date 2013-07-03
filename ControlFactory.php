@@ -23,6 +23,12 @@ class ControlFactory extends ContainerAware
         $this->validTypes = $validTypes;
     }
 
+    /**
+     * 
+     * @param \Optime\Commtool\TemplateBundle\Model\SectionConfigInterface $config
+     * @param array $options
+     * @return ControlInterface
+     */
     public function create(SectionConfigInterface $config, array $options = array())
     {
         $control = $this->resolveControl($config->getType());
@@ -31,6 +37,7 @@ class ControlFactory extends ContainerAware
 
         $control->setIdentifier($config->getIdentifier());
         $control->setIndex($config->getCompleteIdentifier());
+        $control->setSectionId($config->getId());
 
         $control->build($builder, $options);
 
@@ -103,6 +110,11 @@ class ControlFactory extends ContainerAware
     public function getValidTypes()
     {
         return $this->validTypes;
+    }
+
+    public function isValidType($type)
+    {
+        return isset($this->validTypes[$type]);
     }
 
     public function getManipulator()

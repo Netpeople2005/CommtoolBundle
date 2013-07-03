@@ -51,4 +51,27 @@ abstract class AbstractCommtoolBuilder implements CommtoolBuilderInterface
         }
     }
 
+    public function getLayout()
+    {
+        return 'OptimeCommtoolBundle::commtool_layout.html.twig';
+    }
+
+    public function getControl($id, array $controls = null)
+    {
+        if (null === $controls) {
+            $controls = $this->getControls();
+        }
+
+        foreach ($controls as $control) {
+            if ($id === $control->getIdentifier()) {
+                return $control;
+            }
+            if (null !== $result = $this->getControl($id, $control->getChildren())) {
+                return $result;
+            }
+        }
+
+        return null;
+    }
+
 }

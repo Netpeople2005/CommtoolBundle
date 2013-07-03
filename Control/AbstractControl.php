@@ -8,6 +8,8 @@ use Optime\Bundle\CommtoolBundle\Control\View\ViewInterface;
 abstract class AbstractControl implements ControlInterface
 {
 
+    protected $sectionId;
+
     /**
      *
      * @var $value
@@ -44,9 +46,14 @@ abstract class AbstractControl implements ControlInterface
      */
     protected $options = array();
 
-    public function getDefaultValue()
+    public function getSectionId()
     {
-        return null;
+        return $this->sectionId;
+    }
+
+    public function setSectionId($sectionId)
+    {
+        $this->sectionId = $sectionId;
     }
 
     public function getValue()
@@ -59,9 +66,11 @@ abstract class AbstractControl implements ControlInterface
                 $value[$id] = $control->getValue();
             }
 
-            return $value;
+            return array('value' => $value);
+//            return $value;
         } else {
-            return $this->value;
+            return array('value' => $this->value);
+//            return $this->value;
         }
     }
 
@@ -89,10 +98,17 @@ abstract class AbstractControl implements ControlInterface
     {
         $this->value = $value;
         if (is_array($value)) {
-            foreach ($this->children as $index => $control) {
-                $id = $control->getIdentifier();
-                if (!$control->isReadOnly() and isset($value[$id])) {
-                    $control->setValue($value[$id]);
+            if (count($this->children)) {
+                foreach ($this->children as $index => $control) {
+                    $id = $control->getIdentifier();
+                    if (!$control->isReadOnly() and isset($value[$id])) {
+                        var_dump($value[$id]);
+                        $control->setValue($value[$id]);
+                    }
+                }
+            } else {
+                if(array_key_exists($this->getIdentifier(), $value)){
+                    $this->value = $value[$this->getIdentifier()];
                 }
             }
         }
@@ -108,16 +124,13 @@ abstract class AbstractControl implements ControlInterface
         $this->children = $children;
     }
 
-    public function getSelector($useParent = true)
+    public function getCompleteType($useName = false)
     {
-
-        if ($useParent && $this->getParent()) {
-            $selector = $this->getParent()->getSelector() . ' .' . $this->getName();
+        if ($this->getParent()) {
+            return $this->getParent()->getCompleteType() . '_' . $this->getName();
         } else {
-            $selector = '.' . $this->getName();
+            return $this->getName();
         }
-
-        return $selector;
     }
 
     public function getOptions($name = null)
@@ -139,30 +152,23 @@ abstract class AbstractControl implements ControlInterface
         return $this->parent;
     }
 
-    public function setParent(ControlInterface $parent)
+    public function setParent(ControlInterface $parent = null)
     {
         $this->parent = $parent;
-    }
-
-    public function createView(ViewInterface $parent = null)
-    {
-        $view = new View\ControlView($this, $parent);
-
-        foreach ($this->getChildren() as $control) {
-            $control->createView($view);
-        }
-
-        return $view;
     }
 
     public function isReadOnly()
     {
         return isset($this->options['readonly']) ? $this->options['readonly'] : false;
     }
-    
+
     public function getName()
     {
-        $this->getType();
+        if (isset($this->options['filter_name'])) {
+            return $this->options['filter_name'] . '_' . $this->getType();
+        } else {
+            return $this->getType();
+        }
     }
 
 }

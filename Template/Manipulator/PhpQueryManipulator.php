@@ -34,14 +34,14 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
         $vals = array();
 
         if ($parent) {
-            $phpQuery = $this->phpQueryCont[$parent->getSelector()]->eq($parent->getIndex());
+            $phpQuery = $this->phpQueryCont[$parent->getCompleteType()]->eq($parent->getIndex());
         } else {
             $phpQuery = $this->phpQueryCont;
         }
 
         foreach ($builder->getPrototypes() as $prototype) {
 
-            $selector = $prototype->getSelector(false);
+            $selector = $prototype->getCompleteType(false);
 
             if ($parent) {
                 $prototype->setParent($parent);

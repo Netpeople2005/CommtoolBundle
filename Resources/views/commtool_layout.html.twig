@@ -1,25 +1,48 @@
 {% block control_singleline %}
-<div class="commtool-control">
+<div class="commtool-control commtool-control-{{ type }}">
     {% if options['config'].is_interactive %}
         {% if label %}<label>{{ label }}</label>{% endif %}
-        <input type="text" ng-model="{{ id }}" />
+        <input type="text" ng-model="{{ id }}.value" {{ control_binds() }} />
     {% endif %}
 </div>
 {% endblock %}
 
 {% block control_multiline %}
-<div class="commtool-control">
+<div class="commtool-control commtool-control-{{ type }}">
     {% if options['config'].is_interactive %}
         {% if label is not empty %}<label>{{ label }}</label>{% endif %}
-        <textarea type="text" ng-model="{{ id }}"></textarea>
+        <textarea type="text" ng-model="{{ id }}.value" {{ control_binds() }} ></textarea>
     {% endif %}
 </div>
 {% endblock %}
 
 {% block control_product %}
-<div class="commtool-control">
+<div class="commtool-control commtool-control-{{ type }}">
     {% if label is not empty %}<label>{{ label }}</label>{% endif %}
-    {{ commtool_singleline(children[0]) }}
-    {{ commtool_multiline(children[1]) }}
+    {{ commtool_controls(children) }}    
+</div>
+{% endblock %}
+
+{% block control_product_singleline %}
+<div class="commtool-control commtool-control-{{ type }}">
+    {% if options['config'].is_interactive %}
+        {% if label %}<label>{{ label }}</label>{% endif %}
+        {{ commtool_controls(children) }}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block control_product_multiline %}
+<div class="commtool-control commtool-control-{{ type }}">
+    {% if options['config'].is_interactive %}
+        {% if label is not empty %}<label>{{ label }}</label>{% endif %}
+        <textarea type="text" ng-model="{{ id }}.value"  {{ control_binds() }}  ></textarea>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block control_loop %}
+<div class="commtool-control commtool-control-loop commtool-control-{{ type }}" ng-repeat="{{ id }} in {{ id }}" {{ control_binds() }}>
+    {{ commtool_controls(children) }}
 </div>
 {% endblock %}

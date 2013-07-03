@@ -12,10 +12,13 @@ interface ControlInterface
 {
 
     /**
-     * Devuelve el nombre que identifica la sección que maneja el control
+     * Devuelve el nombre que identifica la sección que maneja el control, y puede variar.
      */
     public function getName();
 
+    /**
+     * Devuelve el tipo de sección, para una sección de un tipo definido no cambiará jamas.
+     */
     public function getType();
 
     /**
@@ -24,11 +27,6 @@ interface ControlInterface
      * @param array $options opciones adicionales del template
      */
     public function build(BuilderInterface $builder, array $options = array());
-
-    /**
-     * Devuelve el valor inicial que tendrá la sección.
-     */
-    public function getDefaultValue();
 
     /**
      * Devuelve el valor actual de la sección.
@@ -49,15 +47,19 @@ interface ControlInterface
 
     public function setChildren(array $children);
 
-    public function getSelector($useParent = true);
+    public function getCompleteType($useName = false);
 
     public function getParent();
 
-    public function setParent(ControlInterface $parent);
+    public function setParent(ControlInterface $parent = null);
 
     public function getOptions($name = null);
 
     public function setOptions(array $options);
 
     public function isReadOnly();
+
+    public function getSectionId();
+
+    public function setSectionId($id);
 }

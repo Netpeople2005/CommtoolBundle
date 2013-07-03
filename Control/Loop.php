@@ -25,18 +25,22 @@ class Loop extends AbstractControl implements ControlLoopInterface
 
     public function build(BuilderInterface $builder, array $options = array())
     {
-        if (!isset($options['type'])) {
-            throw new \Exception("Se debe especificar el atributo type en las opciones de la sección de tipo loop");
+        if (!isset($options['filter_name'])) {
+            throw new \Exception("Los controles de tipo Loop solo se puede crear llamando al método addNamed del Builder");
         }
 
-        $this->type = $builder->getFactory()->validateControlOrType($options['type']);
+        $childrenOptions = isset($options['children_options']) ? $options['children_options'] : array();
 
-        $builder->add($this->type);
+        if (isset($options['type'])) {
+            $builder->add($options['type'], $childrenOptions);
+        } else {
+            $builder->add($options['filter_name'], $childrenOptions);
+        }
     }
 
     public function getType()
     {
-        return 'loop_' . $this->type;
+        return 'loop';
     }
 
     public function setChildren(array $children)

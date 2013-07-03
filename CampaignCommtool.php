@@ -4,29 +4,48 @@ namespace Optime\Bundle\CommtoolBundle;
 
 use Optime\Bundle\CommtoolBundle\AbstractCommtoolBuilder;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
-use Optime\Commtool\TemplateBundle\Model\SectionConfigInterface;
 
 class CampaignCommtool extends AbstractCommtoolBuilder
 {
 
     public function build(BuilderInterface $builder, array $options = array())
     {
-//        $builder->add('image', array(
-//            'data' => '/commtool/web/bundles/commtooltemplate/images/template_09.jpg'
-//        ));
-        $builder->add('singleline', array(
-            'data' => function(SectionConfigInterface $section, $value) {
-                return 'Hola Mundo';
-            },
+        $builder->addNamed('logo_ppal', 'image', array(
+            'bind' => array(
+                'click' => 'get_gallery_ppal'
+            ),
         ));
-//        $builder->add('product');
-//        $builder->add('loop', array(
-//            'type' => 'singleline',
-//        ));
-//        $builder->add('loop', array(
-//            'type' => 'product',
-//            'selector' => 'pro',
-//        ));
+        $builder->addNamed('ppal', 'image', array(
+            'bind' => array(
+                'click' => 'get_gallery_theme'
+            ),
+        ));
+        $builder->add('singleline', array(
+            'bind' => array(
+                'click' => 'mi_function'
+            ),
+        ));
+
+        $builder->addNamed('loop', 'singleline');
+
+        $builder->add('multiline');
+
+        $builder->addNamed('singleline', 'loop', array(
+            'type' => 'singleline',
+            'children_options' => array(
+                'bind' => array(
+                    'click' => 'HOLA'
+                ),
+            ),
+            'bind' => array(
+                'click' => 'show_data'
+            ),
+        ));
+    }
+
+    public function getLayout()
+    {
+        return 'OptimeCommtoolBundle::campaign_layout.html.twig';
     }
 
 }

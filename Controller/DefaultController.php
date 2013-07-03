@@ -15,12 +15,12 @@ class DefaultController extends Controller
         $template = $this->getDoctrine()
                 ->getManager()
                 ->getRepository('CommtoolTemplateBundle:Template')
-                ->find(4);
+                ->find(1);
 
         $data = array(
-            's_sponsor_loop' => array(
-                '/commtool/web/bundles/commtooltemplate/images/template_45.jpg',
-                '/commtool/web/bundles/commtooltemplate/images/template_43.jpg',
+            's_4' => array(
+                array('s_5' => 'Primer Producto'),
+                array('s_5' => 'Segundo Producto'),
             ),
         );
 
@@ -30,8 +30,12 @@ class DefaultController extends Controller
 
         $c = $commtool->getControls();
 //        var_dump($c);
-////        var_dump($c[1]);
-//        var_dump($commtool->getValues());
+//          var_dump($c[3]->getChildren());
+        $v = $commtool->getValues();
+        var_dump($v);
+        var_dump($v['s_4'][0]);
+//        die;
+//        var_dump(end($v));
 //        $commtool->setValues($data);
 //        var_dump($commtool->getValues());
 //        die;

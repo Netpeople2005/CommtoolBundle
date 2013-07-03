@@ -44,7 +44,7 @@ class CommtoolFactory
     {
         $manipulator = $this->controlFactory->getManipulator();
 
-        $manipulator->setContent($this->getContent($template));
+        $manipulator->setContent($this->twig->render($template->getView()));
 
         $builder = new Builder($this->controlFactory, null);
 
@@ -62,17 +62,27 @@ class CommtoolFactory
             $controls = $builder->createControls($template->getSections());
         }
 
-        $commtoolBuilder->setContent($manipulator->getContent());
         $commtoolBuilder->setControls($controls);
+        
+        $commtoolBuilder->setContent($this->getContent($commtoolBuilder, $template));
 
         $commtoolBuilder->setValues($values);
     }
 
-    protected function getContent(TemplateInterface $template)
+//
+//    protected function getContent(TemplateInterface $template)
+//    {
+//        $this->sectionExtension->setTemplate($template);
+//        $content = $this->twig->render($template->getView());
+//        $this->sectionExtension->setTemplate(null);
+//        return $content;
+//    }
+
+    protected function getContent(CommtoolBuilderInterface $commtool, TemplateInterface $template)
     {
-        $this->sectionExtension->setTemplate($template);
+        $this->sectionExtension->setCommtool($commtool);
         $content = $this->twig->render($template->getView());
-        $this->sectionExtension->setTemplate(null);
+        $this->sectionExtension->setCommtool(null);
         return $content;
     }
 

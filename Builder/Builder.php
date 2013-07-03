@@ -34,15 +34,7 @@ class Builder implements BuilderInterface
     {
         $sectionType = $this->factory->validateControlOrType($section);
 
-        if ('loop' === $sectionType) {
-            if (!isset($options['type'])) {
-                throw new \Exception("Se debe especificar el atributo type en las opciones de la sección de tipo loop");
-            }
-            $type = $this->factory->validateControlOrType($options['type']);
-            $this->controls[$sectionType . '_' . $type] = $options;
-        } else {
-            $this->controls[$sectionType] = $options;
-        }
+        $this->controls[$sectionType] = $options;
 
         return $this;
     }
@@ -79,7 +71,9 @@ class Builder implements BuilderInterface
                     return false;
                 });
         foreach ($templateSections as $section) {
-            $controls[] = $this->factory->create($section, $this->controls[$section->getName()]);
+            $child = $this->factory->create($section, $this->controls[$section->getName()]);
+            $child->setParent($this->getControl());
+            $controls[] = $child;
         }
         return $controls;
     }
@@ -87,6 +81,17 @@ class Builder implements BuilderInterface
     public function hasControls()
     {
         return count($this->controls) > 0;
+    }
+
+    public function addNamed($name, $sectionType, array $options = array())
+    {
+        $sectionType = $this->factory->validateControlOrType($sectionType);
+
+        $options['filter_name'] = $name;
+
+        $this->controls[$name . '_' . $sectionType] = $options;
+
+        return $this;
     }
 
 }
