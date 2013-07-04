@@ -6,6 +6,11 @@ use Optime\Bundle\CommtoolBundle\TemplateView;
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
 use Optime\Bundle\CommtoolBundle\CommtoolBuilderInterface;
 
+/**
+ * Estensión twig que permite crear los controles de un commtool y renderizar el template del mismo
+ * en la pantalla.
+ * @author Manuel Aguirre <programador.manuel@gmail.com>
+ */
 class CommtoolExtension extends \Twig_Extension
 {
 
@@ -46,12 +51,22 @@ class CommtoolExtension extends \Twig_Extension
         );
     }
 
+    /**
+     * Devuelve el contenido html del template
+     * @param \Optime\Bundle\CommtoolBundle\CommtoolBuilderInterface $commtool
+     * @return string
+     */
     public function content(CommtoolBuilderInterface $commtool)
     {
         $this->commtool = $commtool;
         return $commtool->getContent();
     }
 
+    /**
+     * Devuelve la representación visual de los controles del commtool
+     * @param CommtoolBuilderInterface|array $commtoolOrControls
+     * @return string
+     */
     public function controls($commtoolOrControls)
     {
         if ($commtoolOrControls instanceof CommtoolBuilderInterface) {
@@ -60,13 +75,28 @@ class CommtoolExtension extends \Twig_Extension
 
         $content = '';
         foreach ($commtoolOrControls as $control) {
-//            $content .= $this->control($control->getCompleteType(), $control);
             $content .= $this->control($control->getCompleteType(), $control);
         }
 
         return $content;
     }
 
+    /**
+     * Crear el código javascript que va dentro del controlador de angularjs usado para
+     * el manejo de las secciones del template desde los controles.
+     * 
+     * Ejemplo:
+     * <pre><code>
+     * <script>
+     * function MyCtrl($scope){
+     *      {{ commtool_ng_controller(varCommtool) }}
+     * }
+     * </script>
+     * </code></pre>
+     * 
+     * @param \Optime\Bundle\CommtoolBundle\CommtoolBuilderInterface $commtool
+     * @return string
+     */
     public function ngController(CommtoolBuilderInterface $commtool)
     {
         $js = '';
@@ -81,6 +111,12 @@ class CommtoolExtension extends \Twig_Extension
         return $js;
     }
 
+    /**
+     * Crea variables en el scope que contienen las funciones que pueden ser usadas y 
+     * llamadas en los controles.
+     * @param array $controls
+     * @return string
+     */
     protected function jsBindControls($controls)
     {
         $js = '';
@@ -94,14 +130,7 @@ class CommtoolExtension extends \Twig_Extension
                     $parent = 'scope';
                 }
 
-                $binds[] = $bind . ":function(scope, data, control){
-                    {$bind}(scope, data, control); 
-                    /*if(angular.isArray(data.parent)){
-                        alert('es un array')
-                    }else{
-                        data.parent.{$control->getIdentifier()}=data.element;
-                    }*/
-                }";
+                $binds[] = $bind . ":" . $bind;
             }
             $js .= '$scope.functions.' . $control->getIdentifier() . ' = {' . join(',', $binds) . '}' . PHP_EOL;
             if (count($control->getChildren())) {
@@ -111,6 +140,13 @@ class CommtoolExtension extends \Twig_Extension
         return $js;
     }
 
+    /**
+     * Crea una representación visual del control por medio del archivo twig devuelto por el
+     * método getLayout del CommtoolBuilderInterface
+     * @param string $type
+     * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface $control
+     * @return string
+     */
     public function control($type, ControlInterface $control)
     {
         $context = array(
@@ -141,6 +177,12 @@ class CommtoolExtension extends \Twig_Extension
         return $content;
     }
 
+    /**
+     * Crea los atributos html necesarios en el control para llamar a métodos javascript
+     * al ejecutar eventos sobre el control.
+     * @param array $context
+     * @return string
+     */
     public function binds($context)
     {
         $content = '';

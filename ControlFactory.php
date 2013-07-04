@@ -8,14 +8,24 @@ use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
 use Optime\Commtool\TemplateBundle\Model\SectionConfigInterface;
 use Optime\Bundle\CommtoolBundle\Template\Manipulator\TemplateManipulatorInterface;
 
+/**
+ * Clase que se encarga de crear los controles para un commtool.
+ * 
+ * 
+ * @author Manuel Aguirre <programador.manuel@gmail.com>
+ */
 class ControlFactory extends ContainerAware
 {
 
     /**
-     *
+     * Objeto que lee y escribe en el html
      * @var TemplateManipulatorInterface
      */
     protected $manipulator;
+    /**
+     * controles disponibles en la plataforma
+     * @var array
+     */
     protected $validTypes = array();
 
     function __construct($validTypes)
@@ -24,6 +34,7 @@ class ControlFactory extends ContainerAware
     }
 
     /**
+     * Crea un control a partir de la configuración de una sección.
      * 
      * @param \Optime\Commtool\TemplateBundle\Model\SectionConfigInterface $config
      * @param array $options
@@ -72,6 +83,7 @@ class ControlFactory extends ContainerAware
     }
 
     /**
+     * devuelve una instancia de un control a partir de su nombre ó de una instancia.
      * 
      * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface|string $name
      * @return \Optime\Bundle\CommtoolBundle\Control\ControlInterface
@@ -83,6 +95,13 @@ class ControlFactory extends ContainerAware
         return clone $this->container->get($this->validTypes[$type]);
     }
 
+    /**
+     * verifica que un nombre ó una instancia sean un tipo de control válido
+     * 
+     * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface $controlOrType
+     * @return \Optime\Bundle\CommtoolBundle\Control\ControlInterface
+     * @throws \Exception
+     */
     public function validateControlOrType($controlOrType)
     {
         if ($controlOrType instanceof ControlInterface) {
@@ -102,6 +121,10 @@ class ControlFactory extends ContainerAware
         return $type;
     }
 
+    /**
+     * Establece el container en la clase
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     */
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null)
     {
         parent::setContainer($container);
@@ -112,6 +135,11 @@ class ControlFactory extends ContainerAware
         return $this->validTypes;
     }
 
+    /**
+     * Devuelve true si el tipo pasado por argumento es válido
+     * @param string $type
+     * @return boolean
+     */
     public function isValidType($type)
     {
         return isset($this->validTypes[$type]);

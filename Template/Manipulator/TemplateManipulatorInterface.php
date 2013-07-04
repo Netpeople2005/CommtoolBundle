@@ -6,6 +6,11 @@ use Optime\Bundle\CommtoolBundle\CommtoolBuilderInterface;
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 
+/**
+ * Interfaz que permite leer y escribir partes de un html mediante las secciones
+ * 
+ * @author Manuel Aguirre <programador.manuel@gmail.com>
+ */
 interface TemplateManipulatorInterface
 {
 
