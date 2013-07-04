@@ -10,6 +10,15 @@
 </div>
 {% endblock %}
 
+{% block control_multiline %}
+<div class="commtool-control commtool-control-{{ type }}">
+    {% if options['config'].is_interactive %}
+        {% if label is not empty %}<label>{{ label }}</label>{% endif %}
+        <textarea type="text" ck-editor ng-model="{{ id }}.value" {{ control_binds() }} ></textarea>
+    {% endif %}
+</div>
+{% endblock %}
+
 {% block control_ppal_image %}
 {% block control_logo_ppal_image %}
 <div class="commtool-control commtool-control-{{ type }}">

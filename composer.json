@@ -1,0 +1,7 @@
+{
+    "name": "netpeople/commtool",
+    "require": {
+        "php": ">=5.3.3",
+        "netpeople/commtool_template_config": "dev-master"
+    }
+}

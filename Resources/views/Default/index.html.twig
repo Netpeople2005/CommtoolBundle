@@ -4,7 +4,7 @@
 
 {% block body %}
 {% block content %}
-<div ng-app ng-controller="MainCtrl" style="width: 1000px">
+<div ng-app="campaign" ng-controller="MainCtrl" style="width: 1000px">
     <div class="commtool-content">
         {{ commtool_content(template) }}
     </div>
@@ -28,9 +28,14 @@
 <script type="text/javascript" src="{{ asset('bundles/optimecommtool/js/jquery.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('bundles/optimecommtool/js/angular.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('bundles/commtooltemplate/js/jquery-ui.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/optimecommtool/ckeditor/ckeditor.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/optimecommtool/js/angular.ckeditor.js') }}"></script>
+cript>
 
 <script type="text/javascript">
-    function MainCtrl($scope){
+    var module = angular.module('campaign', ['ck']);
+    
+    module.controller('MainCtrl', function($scope){
         {{ commtool_ng_controller(template) }}
                 
         $scope.images = [{large:'Hola',medium:'MMM'}]
@@ -44,7 +49,7 @@
             
             products.splice(index - 1, 2, actual, anterior)
         }
-    }
+    });
     
     function mi_function(scope, data, context){
         
