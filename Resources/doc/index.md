@@ -21,3 +21,19 @@ _____
 
 En la funcion se pueden/deben especificar una serie de opciones, estas aveces varian dependiendo del tipo de seccion que se esté usando.
 
+```html+jinja
+{{ section_*(name = null, options = null) }}
+```
+
+El argumento name es usado para hacer más especifica una sección, y en las opciones pasamos configuraciones adicionales.
+
+Por ejemplo si tenemos dos secciones de tipo image, pero queremos que cada una tenga una funcionalidad diferente, podemos especializar las secciones dandole un nombre a cada una, con lo cual sería como tener dos secciones diferentes en un mismo template.
+
+Ejemplo:
+
+```html+jinja
+<img {{ section_image('principal') }} src="{{ asset("...") }}" />
+<img {{ section_image('secundaria') }} src="{{ asset("...") }}" />
+```
+
+Acá tenemos dos secciones de tipo image que aunque son del mismo tipo, cada una tiene un nombre diferente, con lo cual podemos hacer que se comporten de forma distinta. y así logramos reusar una sección de diferentes maneras.
