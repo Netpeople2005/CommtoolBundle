@@ -70,6 +70,8 @@ class CommtoolFactory
 
         if ($builder->hasControls() and count($template->getSections())) {
             $controls = $builder->createControls($template->getSections());
+        }else{
+            $controls = array();
         }
 
         $commtoolBuilder->setControls($controls);
