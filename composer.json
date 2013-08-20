@@ -3,7 +3,7 @@
     "require": {
         "php": ">=5.3.3",
         "netpeople/commtool_template_config": "*",
-        "electrolinux/phpquery": "dev-master"
+        "electrolinux/phpquery": "*"
     },
     "autoload": {
         "psr-0": {"Optime\\Bundle\\CommtoolBundle\\": ""}
