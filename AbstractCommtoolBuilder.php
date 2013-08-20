@@ -4,10 +4,26 @@ namespace Optime\Bundle\CommtoolBundle;
 
 use Optime\Bundle\CommtoolBundle\CommtoolBuilderInterface;
 
+/**
+ * Esta es la clase base de todos los commtools,
+ * Mediante la misma se definen la secciones que serán leidas de los 
+ * templates y las estrategias usadas para dichas lecturas.
+ * 
+ * @author Manuel Aguirre <programador.manuel@gmail.com>
+ */
 abstract class AbstractCommtoolBuilder implements CommtoolBuilderInterface
 {
 
+    /**
+     * Contenido del Template
+     * @var type 
+     */
     protected $content;
+
+    /**
+     * Controles que se crearón a partir de las secciones del template.
+     * @var type 
+     */
     protected $controls = array();
 
     public function getContent()
