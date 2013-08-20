@@ -37,3 +37,22 @@ Ejemplo:
 ```
 
 Acá tenemos dos secciones de tipo image que aunque son del mismo tipo, cada una tiene un nombre diferente, con lo cual podemos hacer que se comporten de forma distinta. y así logramos reusar una sección de diferentes maneras.
+
+Creando un Commtool
+-------
+
+Para crear un commtool se debe crear una clase que extienda de **\Optime\Bundle\CommtoolBundle\AbstractCommtoolBuilder**  y luego obtener una instancia de un template, y en base a esos dos objetos crear el commtool de la siguiente manera:
+
+```php
+/**
+ * @ParamConverter("template", class="CommtoolTemplateBundle:Template")
+ */
+public function showEditorAction(Template $template)
+{
+    $commtool = new PromowinCommtool();
+    
+    return $this->render('PromowinPromotionsBundle:Promotion:configure/editor.html.twig', array(
+                'commtool' => $commtool,
+    ));
+}
+```
