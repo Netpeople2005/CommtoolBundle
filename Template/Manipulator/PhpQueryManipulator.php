@@ -94,7 +94,11 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
         if ($part->is('img')) {
             $control->setValue($part->attr('src'));
         } else {
-            $control->setValue($part->html());
+            $html = $part->html();
+            if (!mb_check_encoding($html, 'UTF-8')) {
+                $html = utf8_encode($html);
+            }
+            $control->setValue($html);
         }
     }
 

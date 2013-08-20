@@ -102,12 +102,12 @@ abstract class AbstractControl implements ControlInterface
                 foreach ($this->children as $index => $control) {
                     $id = $control->getIdentifier();
                     if (!$control->isReadOnly() and isset($value[$id])) {
-                        var_dump($value[$id]);
+//                        var_dump($value[$id]);
                         $control->setValue($value[$id]);
                     }
                 }
             } else {
-                if(array_key_exists($this->getIdentifier(), $value)){
+                if (array_key_exists($this->getIdentifier(), $value)) {
                     $this->value = $value[$this->getIdentifier()];
                 }
             }
