@@ -22,6 +22,7 @@ class ControlFactory extends ContainerAware
      * @var TemplateManipulatorInterface
      */
     protected $manipulator;
+
     /**
      * controles disponibles en la plataforma
      * @var array
@@ -52,11 +53,7 @@ class ControlFactory extends ContainerAware
 
         $control->build($builder, $options);
 
-        if (isset($options['config']) and is_array($options['config'])) {
-            $options['config'] = array_merge($options['config'], $config->getConfig());
-        } else {
-            $options['config'] = $config->getConfig();
-        }
+        $options += $config->getConfig();
 
         if (!isset($options['label'])) {
             $options['label'] = $config->getLabel();

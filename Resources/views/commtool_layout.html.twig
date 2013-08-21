@@ -1,7 +1,7 @@
 {% block control_singleline %}
 <div class="commtool-control commtool-control-{{ type }}">
-    {% if options['config'].is_interactive %}
-        {% if label %}<label>{{ label }}</label>{% endif %}
+    {% if options.is_interactive == true %}
+        {{ block('control_label') }}
         <input type="text" ng-model="{{ id }}.value" {{ control_binds() }} />
     {% endif %}
 </div>
@@ -9,24 +9,26 @@
 
 {% block control_multiline %}
 <div class="commtool-control commtool-control-{{ type }}">
-    {% if options['config'].is_interactive %}
-        {% if label is not empty %}<label>{{ label }}</label>{% endif %}
-        <textarea type="text" ng-model="{{ id }}.value" {{ control_binds() }} ></textarea>
+    {% if options.is_interactive == true %}
+        {{ block('control_label') }}
+        <textarea type="text" ng-model="{{ id }}.value" {{ control_binds() }}
+          {% if options.is_html  == true %}ck-editor{% endif %}>
+        </textarea>
     {% endif %}
 </div>
 {% endblock %}
 
 {% block control_product %}
 <div class="commtool-control commtool-control-{{ type }}">
-    {% if label is not empty %}<label>{{ label }}</label>{% endif %}
+    {{ block('control_label') }}
     {{ commtool_controls(children) }}    
 </div>
 {% endblock %}
 
 {% block control_product_singleline %}
 <div class="commtool-control commtool-control-{{ type }}">
-    {% if options['config'].is_interactive %}
-        {% if label %}<label>{{ label }}</label>{% endif %}
+    {% if options.is_interactive == true %}
+        {{ block('control_label') }}
         {{ commtool_controls(children) }}
     {% endif %}
 </div>
@@ -34,9 +36,9 @@
 
 {% block control_product_multiline %}
 <div class="commtool-control commtool-control-{{ type }}">
-    {% if options['config'].is_interactive %}
-        {% if label is not empty %}<label>{{ label }}</label>{% endif %}
-        <textarea type="text" ng-model="{{ id }}.value"  {{ control_binds() }}  ></textarea>
+    {% if options.is_interactive == true %}
+        {{ block('control_label') }}
+        <textarea type="text" ng-model="{{ id }}.value"  {{ control_binds() }} ></textarea>
     {% endif %}
 </div>
 {% endblock %}
@@ -45,4 +47,8 @@
 <div class="commtool-control commtool-control-loop commtool-control-{{ type }}" ng-repeat="{{ id }} in {{ id }}" {{ control_binds() }}>
     {{ commtool_controls(children) }}
 </div>
+{% endblock %}
+
+{% block control_label %}
+{% if label is not empty %}<label>{{ label }}</label>{% endif %}
 {% endblock %}
