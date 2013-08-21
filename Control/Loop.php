@@ -2,10 +2,12 @@
 
 namespace Optime\Bundle\CommtoolBundle\Control;
 
-use Optime\Bundle\CommtoolBundle\Control\AbstractControl;
+use Exception;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
+use Optime\Bundle\CommtoolBundle\Control\AbstractControl;
 use Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface;
-use Optime\Commtool\TemplateBundle\Model\SectionConfigInterface;
+use Optime\Bundle\CommtoolBundle\ControlFactory;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class Loop extends AbstractControl implements ControlLoopInterface
 {
@@ -19,19 +21,19 @@ class Loop extends AbstractControl implements ControlLoopInterface
 
     /**
      *
-     * @var \Optime\Bundle\CommtoolBundle\ControlFactory
+     * @var ControlFactory
      */
     protected $factory;
 
     public function build(BuilderInterface $builder, array $options = array())
     {
         if (!isset($options['filter_name'])) {
-            throw new \Exception("Los controles de tipo Loop solo se puede crear llamando al método addNamed del Builder");
+            throw new Exception("Los controles de tipo Loop solo se puede crear llamando al método addNamed del Builder");
         }
 
-        $childrenOptions = isset($options['children_options']) ? $options['children_options'] : array();
+        $childrenOptions = $options['children'];
 
-        if (isset($options['type'])) {
+        if ($options['type']) {
             $builder->add($options['type'], $childrenOptions);
         } else {
             $builder->add($options['filter_name'], $childrenOptions);
@@ -84,6 +86,16 @@ class Loop extends AbstractControl implements ControlLoopInterface
                 $this->children[] = $prototype;
             }
         }
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'type' => null,
+            'children' => array(),
+        ));
     }
 
 }

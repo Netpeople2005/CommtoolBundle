@@ -6,7 +6,7 @@ use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 use Optime\Bundle\CommtoolBundle\Control\AbstractControl;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class Singleline extends AbstractControl
+class Text extends AbstractControl
 {
 
     public function build(BuilderInterface $builder, array $options = array())
@@ -16,7 +16,7 @@ class Singleline extends AbstractControl
 
     public function getType()
     {
-        return 'singleline';
+        return 'text';
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -24,7 +24,8 @@ class Singleline extends AbstractControl
         parent::setDefaultOptions($resolver);
 
         $resolver->setDefaults(array(
-            'is_html' => false,
+            'is_interactive' => false,
+            'is_html' => true,
         ));
     }
 

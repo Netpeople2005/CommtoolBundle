@@ -3,6 +3,7 @@
 namespace Optime\Bundle\CommtoolBundle\Control;
 
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Define una sección del Elemento Editable.
@@ -62,4 +63,8 @@ interface ControlInterface
     public function getSectionId();
 
     public function setSectionId($id);
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver);
+
+    public function getSectionName();
 }

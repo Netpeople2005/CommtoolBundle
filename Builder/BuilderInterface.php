@@ -16,6 +16,13 @@ interface BuilderInterface
      */
     public function add($sectionName, array $options = array());
 
+    /**
+     * 
+     * @param type $name
+     * @param type $sectionName
+     * @param array $options
+     * @return BuilderInterface
+     */
     public function addNamed($name, $sectionName, array $options = array());
 
     /**

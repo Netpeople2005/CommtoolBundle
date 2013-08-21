@@ -10,8 +10,9 @@ class Product extends AbstractControl
 
     public function build(BuilderInterface $builder, array $options = array())
     {
-        $builder->add('singleline')
-                ->add('multiline');
+        $builder->addNamed('product_image', 'image');
+        $builder->addNamed('product_name', 'text');
+        $builder->addNamed('product_description', 'multiline');
     }
 
     public function getType()

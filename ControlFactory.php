@@ -2,11 +2,14 @@
 
 namespace Optime\Bundle\CommtoolBundle;
 
+use Exception;
 use Optime\Bundle\CommtoolBundle\Builder\Builder;
-use Symfony\Component\DependencyInjection\ContainerAware;
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
-use Optime\Commtool\TemplateBundle\Model\SectionConfigInterface;
 use Optime\Bundle\CommtoolBundle\Template\Manipulator\TemplateManipulatorInterface;
+use Optime\Commtool\TemplateBundle\Model\SectionConfigInterface;
+use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Clase que se encarga de crear los controles para un commtool.
@@ -37,13 +40,18 @@ class ControlFactory extends ContainerAware
     /**
      * Crea un control a partir de la configuración de una sección.
      * 
-     * @param \Optime\Commtool\TemplateBundle\Model\SectionConfigInterface $config
+     * @param SectionConfigInterface $config
      * @param array $options
      * @return ControlInterface
      */
     public function create(SectionConfigInterface $config, array $options = array())
     {
         $control = $this->resolveControl($config->getType());
+
+        $options['label'] = $config->getLabel();
+        $control->setDefaultOptions($resolver = $this->getOptionsResolver());
+        $options = $resolver->resolve($options);
+        $control->setOptions($options);
 
         $builder = new Builder($this, $control);
 
@@ -53,13 +61,6 @@ class ControlFactory extends ContainerAware
 
         $control->build($builder, $options);
 
-        $options += $config->getConfig();
-
-        if (!isset($options['label'])) {
-            $options['label'] = $config->getLabel();
-        }
-
-        $control->setOptions($options);
         if ($builder->hasControls() and count($config->getChildren())) {
             $controls = $builder->createControls($config->getChildren());
             $control->setChildren($controls);
@@ -69,7 +70,8 @@ class ControlFactory extends ContainerAware
 
         if (isset($options['data'])) {
             if (is_callable($options['data'])) {
-                $value = call_user_func($options['data'], $config, $control->getValue());
+                $value = call_user_func($options['data']
+                        , $control->getValue(), $control, $config);
                 $control->setValue($value);
             } else {
                 $control->setValue($options['data']);
@@ -82,8 +84,8 @@ class ControlFactory extends ContainerAware
     /**
      * devuelve una instancia de un control a partir de su nombre ó de una instancia.
      * 
-     * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface|string $name
-     * @return \Optime\Bundle\CommtoolBundle\Control\ControlInterface
+     * @param ControlInterface|string $name
+     * @return ControlInterface
      */
     public function resolveControl($type)
     {
@@ -95,9 +97,9 @@ class ControlFactory extends ContainerAware
     /**
      * verifica que un nombre ó una instancia sean un tipo de control válido
      * 
-     * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface $controlOrType
-     * @return \Optime\Bundle\CommtoolBundle\Control\ControlInterface
-     * @throws \Exception
+     * @param ControlInterface $controlOrType
+     * @return ControlInterface
+     * @throws Exception
      */
     public function validateControlOrType($controlOrType)
     {
@@ -108,11 +110,11 @@ class ControlFactory extends ContainerAware
         }
 
         if (!is_string($type)) {
-            throw new \Exception("No se reconoce el valor " . (string) $type);
+            throw new Exception("No se reconoce el valor " . (string) $type);
         }
 
         if (!isset($this->validTypes[$type])) {
-            throw new \Exception("El control de tipo $type no se reconoce como un control registrado");
+            throw new Exception("El control de tipo $type no se reconoce como un control registrado");
         }
 
         return $type;
@@ -120,9 +122,9 @@ class ControlFactory extends ContainerAware
 
     /**
      * Establece el container en la clase
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param ContainerInterface $container
      */
-    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null)
+    public function setContainer(ContainerInterface $container = null)
     {
         parent::setContainer($container);
     }
@@ -150,6 +152,17 @@ class ControlFactory extends ContainerAware
     public function setManipulator(TemplateManipulatorInterface $manipulator)
     {
         $this->manipulator = $manipulator;
+    }
+
+    /**
+     * 
+     * @return OptionsResolver
+     */
+    public function getOptionsResolver()
+    {
+        $resolver = new OptionsResolver();
+
+        return $resolver;
     }
 
 }

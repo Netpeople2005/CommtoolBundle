@@ -3,7 +3,7 @@
 namespace Optime\Bundle\CommtoolBundle\Control;
 
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
-use Optime\Bundle\CommtoolBundle\Control\View\ViewInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 abstract class AbstractControl implements ControlInterface
 {
@@ -62,15 +62,13 @@ abstract class AbstractControl implements ControlInterface
             $value = array();
             foreach ($this->children as $index => $control) {
                 $id = $control->getIdentifier();
-//                $value[$index] = $control->getValue();
                 $value[$id] = $control->getValue();
             }
 
+            return $value; //parece que así funciona pero no es seguro :-/
             return array('value' => $value);
-//            return $value;
         } else {
             return array('value' => $this->value);
-//            return $this->value;
         }
     }
 
@@ -101,9 +99,34 @@ abstract class AbstractControl implements ControlInterface
             if (count($this->children)) {
                 foreach ($this->children as $index => $control) {
                     $id = $control->getIdentifier();
-                    if (!$control->isReadOnly() and isset($value[$id])) {
-//                        var_dump($value[$id]);
-                        $control->setValue($value[$id]);
+                    $sectionName = $control->getSectionName();
+                    if (!$control->isReadOnly()) {
+                        if (array_key_exists($id, $value)) {
+                            /*
+                             * Acá se setea el valor en base al identificador
+                             * del elemento en la BD.
+                             */
+                            $control->setValue($value[$id]);
+                        } elseif ($sectionName && array_key_exists($sectionName, $value)) {
+                            /*
+                             * aca se setea el valor en base al nombre
+                             * que se le da a la seccion en el html,
+                             * ejemplo:
+                             * {{ section_singleline("titulo") }}
+                             * 
+                             * si el $sectionName contiene el string titulo
+                             * entonces se pasa su valor al control.
+                             */
+                            $control->setValue($value[$sectionName]);
+                        }elseif (array_key_exists($index, $value)){
+                            /*
+                             * esto es una funcionalidad que permite
+                             * setear el valor en base al indice del control
+                             * en el arreglo donde se encuentra contenido
+                             * se debe usar con mucho cuidado.
+                             */
+                            $control->setValue($value[$index]);                            
+                        }
                     }
                 }
             } else {
@@ -169,6 +192,22 @@ abstract class AbstractControl implements ControlInterface
         } else {
             return $this->getType();
         }
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'label' => null,
+            'filter_name' => null,
+            'is_interactive' => true,
+        ));
+
+        $resolver->setOptional(array('data'));
+    }
+
+    public function getSectionName()
+    {
+        return isset($this->options['filter_name']) ? $this->options['filter_name'] : null;
     }
 
 }
