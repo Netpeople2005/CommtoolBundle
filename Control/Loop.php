@@ -60,13 +60,11 @@ class Loop extends AbstractControl implements ControlLoopInterface
 
     public function getValue()
     {
-//            var_dump($this->children);die;
         if (count($this->children)) {
             $values = array();
             foreach ($this->children as $index => $control) {
                 $id = $control->getIdentifier();
-//                $value[$index] = $control->getValue();
-                $values[] = array($id => $control->getValue());
+                $values[$index] = array($id => $control->getValue());
             }
 
             return $values;
@@ -80,7 +78,7 @@ class Loop extends AbstractControl implements ControlLoopInterface
         $this->value = $value;
         if (is_array($value)) {
             $this->setChildren(array());
-            foreach ($value as $val) {
+            foreach ($value as $index => $val) {
                 $prototype = clone $this->prototype;
                 $prototype->setValue($val);
                 $this->children[] = $prototype;

@@ -118,14 +118,14 @@ abstract class AbstractControl implements ControlInterface
                              * entonces se pasa su valor al control.
                              */
                             $control->setValue($value[$sectionName]);
-                        }elseif (array_key_exists($index, $value)){
+                        } elseif (array_key_exists($index, $value)) {
                             /*
                              * esto es una funcionalidad que permite
                              * setear el valor en base al indice del control
                              * en el arreglo donde se encuentra contenido
                              * se debe usar con mucho cuidado.
                              */
-                            $control->setValue($value[$index]);                            
+                            $control->setValue($value[$index]);
                         }
                     }
                 }
@@ -208,6 +208,20 @@ abstract class AbstractControl implements ControlInterface
     public function getSectionName()
     {
         return isset($this->options['filter_name']) ? $this->options['filter_name'] : null;
+    }
+
+    /**
+     * Se debe implementar clone para clonar todos los hijos del 
+     * elemento, ya que sino se estaría usando un mismo objeto en varios
+     * controles.
+     */
+    public function __clone()
+    {
+        $prototipes = $this->children;
+        $this->children = array();
+        foreach ($prototipes as $index => $control) {
+            $this->children[$index] = clone $control;
+        }
     }
 
 }
