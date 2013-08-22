@@ -132,6 +132,8 @@ abstract class AbstractControl implements ControlInterface
             } else {
                 if (array_key_exists($this->getIdentifier(), $value)) {
                     $this->value = $value[$this->getIdentifier()];
+                } elseif (array_key_exists('value', $value)) {
+                    $this->value = $value['value'];
                 }
             }
         }

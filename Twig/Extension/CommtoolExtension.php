@@ -100,11 +100,21 @@ class CommtoolExtension extends \Twig_Extension
     public function ngController(CommtoolBuilderInterface $commtool)
     {
         $js = '';
+        $sectionNames = array();
         foreach ($commtool->getValues() as $id => $value) {
             $js .= '$scope.' . $id . ' = ' . json_encode($value) . PHP_EOL;
+            $sectionNames[] = $id;
         }
 
-        $js.= PHP_EOL . '$scope.functions = {}' . PHP_EOL;
+        $js .= '$scope.$getValues = function(){
+                  var values = {};
+                  angular.forEach('. json_encode($sectionNames) .', function(index){
+                      values[index] = $scope[index];
+                  });
+                  return values;
+              };' . PHP_EOL;
+
+        $js.= PHP_EOL . '$scope.functions = {};' . PHP_EOL;
 
         $js.= $this->jsBindControls($commtool->getControls());
 
@@ -132,7 +142,7 @@ class CommtoolExtension extends \Twig_Extension
 
                 $binds[] = $bind . ":" . $bind;
             }
-            $js .= '$scope.functions.' . $control->getIdentifier() . ' = {' . join(',', $binds) . '}' . PHP_EOL;
+            $js .= '$scope.functions.' . $control->getIdentifier() . ' = {' . join(',', $binds) . '};' . PHP_EOL;
             if (count($control->getChildren())) {
                 $js .= $this->jsBindControls($control->getChildren());
             }
@@ -158,15 +168,15 @@ class CommtoolExtension extends \Twig_Extension
             'options' => $control->getOptions(),
             'control' => $control,
         );
-        
-        if($control instanceof \Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface){
+
+        if ($control instanceof \Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface) {
             $context['children'] = array(current($control->getChildren()));
-        }else{
+        } else {
             $context['children'] = $control->getChildren();
         }
-        
+
         $content = $this->getTemplate()->renderBlock("control_{$type}", $context);
-        
+
         if (!$content) {
             $type = explode('_', $type, 2);
             if (count($type) > 1) {

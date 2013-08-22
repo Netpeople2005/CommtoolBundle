@@ -61,8 +61,34 @@ abstract class AbstractCommtoolBuilder implements CommtoolBuilderInterface
     {
         foreach ($this->getControls() as $index => $control) {
             $id = $control->getIdentifier();
-            if (!$control->isReadOnly() and isset($data[$id])) {
-                $control->setValue($data[$id]);
+            $sectionName = $control->getSectionName();
+            if (!$control->isReadOnly()) {
+                if (array_key_exists($id, $data)) {
+                    /*
+                     * Acá se setea el valor en base al identificador
+                     * del elemento en la BD.
+                     */
+                    $control->setValue($data[$id]);
+                } elseif ($sectionName && array_key_exists($sectionName, $data)) {
+                    /*
+                     * aca se setea el valor en base al nombre
+                     * que se le da a la seccion en el html,
+                     * ejemplo:
+                     * {{ section_singleline("titulo") }}
+                     * 
+                     * si el $sectionName contiene el string titulo
+                     * entonces se pasa su valor al control.
+                     */
+                    $control->setValue($data[$sectionName]);
+                } elseif (array_key_exists($index, $data)) {
+                    /*
+                     * esto es una funcionalidad que permite
+                     * setear el valor en base al indice del control
+                     * en el arreglo donde se encuentra contenido
+                     * se debe usar con mucho cuidado.
+                     */
+                    $control->setValue($data[$index]);
+                }
             }
         }
     }
