@@ -170,7 +170,7 @@ class CommtoolExtension extends \Twig_Extension
         );
 
         if ($control instanceof \Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface) {
-            $context['children'] = array(current($control->getChildren()));
+            $context['children'] = array($control->getPrototype());
         } else {
             $context['children'] = $control->getChildren();
         }
