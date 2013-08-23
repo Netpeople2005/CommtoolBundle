@@ -80,7 +80,7 @@ class Loop extends AbstractControl implements ControlLoopInterface
             $this->setChildren(array());
             foreach ($value as $index => $val) {
                 $prototype = clone $this->prototype;
-                $prototype->setValue($val);
+                $prototype->setValue(current($val));
                 $this->children[] = $prototype;
             }
         }
