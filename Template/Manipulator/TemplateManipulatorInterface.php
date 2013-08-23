@@ -4,7 +4,6 @@ namespace Optime\Bundle\CommtoolBundle\Template\Manipulator;
 
 use Optime\Bundle\CommtoolBundle\CommtoolBuilderInterface;
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
-use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 
 /**
  * Interfaz que permite leer y escribir partes de un html mediante las secciones
@@ -36,27 +35,11 @@ interface TemplateManipulatorInterface
     public function load(ControlInterface $control);
 
     /**
-     * Guarda en el content actual, el valor de la sección.
-     * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface $section
+     * Genera un html donde los valores de las secciones son los de los controles
+     * del CommtoolBuilderInterface;
+     * @param CommtoolBuilderInterface $template
+     * @return string Html generado
      */
-    public function save(CommtoolBuilderInterface $template);
+    public function generate(CommtoolBuilderInterface $template);
 
-    public function saveControl(ControlInterface $control, &$content);
-
-    /**
-     * Verifica la existencia de la sección en el content actual
-     * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface $section
-     * @return boolean
-     */
-    public function exists(ControlInterface $section);
-
-    /**
-     * Crea secciones a partir de los tipos especificados en el builder.
-     * @param \Optime\Bundle\CommtoolBundle\Builder\BuilderInterface $builder
-     * @param \Optime\Bundle\CommtoolBundle\Control\ControlInterface $parent si se especifica, crea las secciones a partir de esa sección
-     * @return array arreglo con las secciones creadas.
-     */
-    public function createControls(BuilderInterface $builder, ControlInterface $parent = null);
-
-    public function prepareContentView(CommtoolBuilderInterface $template, array $controlViews);
 }
