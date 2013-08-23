@@ -31,7 +31,7 @@ class Loop extends AbstractControl implements ControlLoopInterface
             throw new Exception("Los controles de tipo Loop solo se puede crear llamando al método addNamed del Builder");
         }
 
-        $childrenOptions = $options['children'];
+        $childrenOptions = $options['options'];
 
         if ($options['type']) {
             $builder->add($options['type'], $childrenOptions);
@@ -92,7 +92,7 @@ class Loop extends AbstractControl implements ControlLoopInterface
 
         $resolver->setDefaults(array(
             'type' => null,
-            'children' => array(),
+            'options' => array(),
         ));
     }
 

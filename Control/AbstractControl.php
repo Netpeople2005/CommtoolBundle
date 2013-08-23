@@ -204,7 +204,7 @@ abstract class AbstractControl implements ControlInterface
             'is_interactive' => true,
         ));
 
-        $resolver->setOptional(array('data'));
+        $resolver->setOptional(array('data', 'bind'));
     }
 
     public function getSectionName()

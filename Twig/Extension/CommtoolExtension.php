@@ -167,6 +167,7 @@ class CommtoolExtension extends \Twig_Extension
             'label' => $control->getOptions('label'),
             'options' => $control->getOptions(),
             'control' => $control,
+            'parent' => $control->getParent(),
         );
 
         if ($control instanceof \Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface) {
@@ -212,7 +213,7 @@ class CommtoolExtension extends \Twig_Extension
 
         if (isset($context['options']['bind'])) {
             foreach ((array) $context['options']['bind'] as $event => $function) {
-                $content .= " ng-{$event}='functions.{$context['identifier']}.{$function}(this, {$context['id']}, {$controlData})' ";
+                $content .= " ng-{$event}='functions.{$context['identifier']}.{$function}({$context['id']}, {$controlData})' ";
             }
         }
 
