@@ -5,6 +5,7 @@ namespace Optime\Bundle\CommtoolBundle\Template\Manipulator;
 use Optime\Bundle\CommtoolBundle\CommtoolBuilderInterface;
 use Optime\Bundle\CommtoolBundle\Control\ControlInterface;
 use Optime\Bundle\CommtoolBundle\Control\ControlLoopInterface;
+use Optime\Bundle\CommtoolBundle\Control\Image;
 use Optime\Bundle\CommtoolBundle\ControlFactory;
 use Optime\Bundle\CommtoolBundle\Template\Manipulator\TemplateManipulatorInterface;
 use phpQuery;
@@ -88,7 +89,11 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
 
     protected function updateContent(\phpQueryObject $content, ControlInterface $control)
     {
-        $content->html(current($control->getValue()));
+        if ($control instanceof Image and $content->is('img')) {
+            $content->attr('src', current($control->getValue()));
+        } else {
+            $content->html(current($control->getValue()));
+        }
     }
 
     protected function updateLoopContent(\phpQueryObject $content, ControlLoopInterface $control)
