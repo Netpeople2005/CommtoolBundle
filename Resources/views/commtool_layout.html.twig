@@ -46,7 +46,8 @@
 {% endblock %}
 
 {% block control_loop %}
-<div class="commtool-control commtool-control-loop commtool-control-{{ type }}" ng-repeat="{{ id }} in {{ id }}" {{ control_binds() }}>
+<div class="commtool-control commtool-control-loop commtool-control-{{ type }}" 
+     ng-repeat="{{ identifier }} in {{ id }}" {{ control_binds() }}>
     {{ commtool_controls(children) }}
 </div>
 {% endblock %}

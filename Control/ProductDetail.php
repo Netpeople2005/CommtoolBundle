@@ -5,20 +5,19 @@ namespace Optime\Bundle\CommtoolBundle\Control;
 use Optime\Bundle\CommtoolBundle\Control\AbstractControl;
 use Optime\Bundle\CommtoolBundle\Builder\BuilderInterface;
 
-class Product extends AbstractControl
+class ProductDetail extends AbstractControl
 {
 
     public function build(BuilderInterface $builder, array $options = array())
     {
-        $builder->addNamed('product_image', 'image');
-        $builder->addNamed('product_name', 'text');
-        $builder->addNamed('product_description', 'multiline');
-        $builder->addNamed('product_detail', 'loop');
+        $builder->addNamed('part_number', 'text');
+        $builder->addNamed('factor', 'text');
+        $builder->addNamed('points', 'text');
     }
 
     public function getType()
     {
-        return 'product';
+        return 'product_detail';
     }
 
 }
