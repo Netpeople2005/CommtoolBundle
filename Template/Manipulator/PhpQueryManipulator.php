@@ -59,6 +59,12 @@ class PhpQueryManipulator implements TemplateManipulatorInterface
 
         $this->_generate($content, $template->getControls());
 
+        $content->find('*')->removeAttr('data-id');
+        $content->find('*')->removeAttr('data-type');
+        $content->find('*')->removeAttr('data-name');
+        $content->find('*')->removeAttr('ng-bind');
+        $content->find('*')->removeAttr('ng-repeat');
+
         return (string) $content;
     }
 
