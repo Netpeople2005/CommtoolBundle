@@ -11,7 +11,7 @@ class ProductDetail extends AbstractControl
     public function build(BuilderInterface $builder, array $options = array())
     {
         $builder->addNamed('part_number', 'text');
-        $builder->addNamed('factor', 'text');
+        $builder->addNamed('reward', 'text');
         $builder->addNamed('points', 'text');
     }
 
