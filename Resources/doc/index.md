@@ -118,7 +118,8 @@ class CommtoolProduct extends AbstractCommtoolBuilder
             'data' => function($a, ControlInterface $b, SectionConfigInterface $c)
             use ($promotion, $commtool) { //para este caso la funcion usa la promoción y la instancia de esta misma clase
             
-                //la
+                //la idea es recorrer los productos que posee la promoción y crear un array para luego devolverlo
+                //donde dicho array contendrá los valores para cada una de las secciones en el template.
                 $promotionProducts = $promotion->getStrategy();
 
                 $data = array();
@@ -162,11 +163,17 @@ class CommtoolProduct extends AbstractCommtoolBuilder
         ));
     }
 
+    /**
+     * Acá indicamos cual plantilla vamos a usar para pintar los controles del commtool.
+     */
     public function getLayout()
     {
         return 'PromowinPromotionsBundle:Commtool:product_layout.html.twig';
     }
 
+    /**
+     * Esta funcion devuelve la url para la imagen de los productos por unidad de negocio.
+     */
     public function getProductImage(Product $product)
     {
         $id = $product->getCategory()->getBusinessUnits()->getExternalId();
